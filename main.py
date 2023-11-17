@@ -49,6 +49,7 @@ while True:
         if not lista_teclas_presionadas[pg.K_RIGHT] and not lista_teclas_presionadas[pg.K_LEFT]:
             player_1.control("STAY")
 
+
     camara_x = -player_1.rect[0] % imagen_fondo2.get_rect().width
 
     #print(player_1.rect)
@@ -71,17 +72,18 @@ while True:
         # elif player_1.direccion == "left":
         #     player_1.rect[0] -= player_1.move_x * 4
 
-        # if player_1.rect[1] >  :
-        #     player_1.rect.bottom = rectangulo.top  
-        if player_1.rect[0] == rectangulo.left :
+        if player_1.rect[1] < rectangulo.top :
+            player_1.rect.bottom = rectangulo.top  
+        elif player_1.rect[0] < rectangulo.left:
             player_1.rect.right = rectangulo.left
-        elif player_1.rect[0] == rectangulo.left:
+        elif player_1.rect[0] <= rectangulo.right:
             player_1.rect.left = rectangulo.right
-            print("derecha")
     else:
         pass
+    print(f"izquierda : {rectangulo.left}, derecha: {rectangulo.right}. Posicion x: {player_1.rect[0]}, Posicion y: {player_1.rect[1]}")
 
         #print("dejó de colisonar")
+
 
 
 
