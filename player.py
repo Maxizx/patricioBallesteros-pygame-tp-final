@@ -1,7 +1,8 @@
 from doctest import FAIL_FAST
-import pygame
+import pygame as pg
 from constantes import *
 from auxiliar import Auxiliar
+from constantes import *
 
 
 class Player:
@@ -26,6 +27,23 @@ class Player:
         self.direccion = "right"
 
         self.is_jump = False
+
+
+    def selector_de_movimiento(self,movimientos):
+        # if event.type == pg.KEYDOWN:
+        if movimientos[pg.K_LEFT] and not movimientos[pg.K_RIGHT]:
+            self.control("WALK_L")
+        if movimientos[pg.K_RIGHT] and not movimientos[pg.K_LEFT]:
+            self.control("WALK_R")
+        if movimientos[pg.K_SPACE]:
+            self.control("JUMP_R")
+        if movimientos[pg.K_SPACE] and movimientos[pg.K_LEFT]:
+            self.control("JUMP_L")
+        if not movimientos[pg.K_RIGHT] and not movimientos[pg.K_LEFT]:
+            self.control("STAY")
+
+
+
 
     def control(self, action):
         if action == "WALK_R":
@@ -87,6 +105,24 @@ class Player:
         if self.rect.y < 500:
             self.rect.y += self.gravity
 
+
+
+    def colision_con_objetos(self,objeto):
+        if self.rect.colliderect(objeto):
+            if self.rect[1] < objeto.top :
+                self.rect.bottom = objeto.top
+            elif self.rect[1] < objeto.bottom :
+                self.rect.top = objeto.bottom  
+                # if self.rect.y < 500:
+                #     self.rect.y += self.gravity
+            elif self.rect[0] < objeto.left:
+                self.rect.right = objeto.left
+            elif self.rect[0] <= objeto.right:
+                self.rect.left = objeto.right
+
+
     def draw(self, screen):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
+
+
