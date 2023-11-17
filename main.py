@@ -24,7 +24,7 @@ enemigo_1= Enemy(ANCHO_VENTANA, 0, 4, 8, 8, 16)
 fondo_actual = imagen_fondo
 camara_x = player_1.move_x
 primera = True
-player_rect = (200, 500, 50, 50)
+player_rect = (200, 350, 200, 200)
 
 
 while True:
@@ -51,7 +51,7 @@ while True:
 
     camara_x = -player_1.rect[0] % imagen_fondo2.get_rect().width
 
-    print(player_1.rect)
+    #print(player_1.rect)
 
     #camara_x = -player_1.move_x
     screen.blit(imagen_fondo2, imagen_fondo2.get_rect(topleft=(camara_x - imagen_fondo2.get_rect().width,0)))
@@ -61,8 +61,28 @@ while True:
     rectangulo = pg.draw.rect(screen, (0,   255,   0),player_rect)
     circulo = pg.draw.circle(screen,(0,0,0), (100,500),radius=20)
 
+
+
     if player_1.rect.colliderect(rectangulo):
-        player_1.rect[0] -=  player_1.move_x 
+        #print("colisono")
+        #print(player_1.direccion)
+        # if player_1.direccion == "right":
+        #     player_1.rect[0] -= player_1.move_x * 4
+        # elif player_1.direccion == "left":
+        #     player_1.rect[0] -= player_1.move_x * 4
+
+        # if player_1.rect[1] >  :
+        #     player_1.rect.bottom = rectangulo.top  
+        if player_1.rect[0] == rectangulo.left :
+            player_1.rect.right = rectangulo.left
+        elif player_1.rect[0] == rectangulo.left:
+            player_1.rect.left = rectangulo.right
+            print("derecha")
+    else:
+        pass
+
+        #print("dejó de colisonar")
+
 
 
     enemigo_1.update()

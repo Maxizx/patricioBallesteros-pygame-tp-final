@@ -23,6 +23,7 @@ class Player:
         self.animation = self.stay
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
+        self.direccion = "right"
 
         self.is_jump = False
 
@@ -31,17 +32,21 @@ class Player:
             self.move_x = self.speed_walk
             self.animation = self.walk_r
             self.frame = 0
+            self.direccion = "right"
+
 
         elif action == "WALK_L":
             self.move_x = -self.speed_walk
             self.animation = self.walk_l
             self.frame = 0
+            self.direccion = "left"
 
         elif action == "JUMP_R":
             self.move_y = -self.jump
             self.move_x = self.speed_walk
             # self.animation = self.jump_r
             # self.frame = 0
+            self.direccion = "up"
             self.is_jump = True
 
         elif action == "JUMP_L":
@@ -49,6 +54,7 @@ class Player:
             self.move_x = -self.speed_walk
             # self.animation = self.jump_l
             # self.frame = 0
+            self.direccion = "up"
             self.is_jump = True
 
         elif action == "STAY":
@@ -65,6 +71,7 @@ class Player:
             if self.is_jump == True:
                 self.is_jump = False
                 self.move_y = 0
+                self.direccion = "down"
         
 
         if self.rect[0] < 0:
