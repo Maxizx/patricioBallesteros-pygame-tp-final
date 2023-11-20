@@ -106,12 +106,18 @@ class Player:
             self.rect.y += self.gravity
 
 
+    def movimiento_horizontal_de_la_camara(self, valor):
+        camara_x = -self.rect[0] % ANCHO_VENTANA
+        camara_x -=  valor
+        return camara_x
+
 
     def colision_con_objetos(self,objeto):
+
         if self.rect.colliderect(objeto):
-            if self.rect[1] < objeto.top :
+            if self.rect[1] < objeto.top:
                 self.rect.bottom = objeto.top
-            elif self.rect[1] < objeto.bottom :
+            elif self.rect[1] < objeto.bottom:
                 self.rect.top = objeto.bottom  
                 # if self.rect.y < 500:
                 #     self.rect.y += self.gravity
@@ -124,5 +130,4 @@ class Player:
     def draw(self, screen):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
-
 
