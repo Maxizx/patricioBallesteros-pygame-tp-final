@@ -102,8 +102,9 @@ class Player:
         self.rect.x += self.move_x
         self.rect.y += self.move_y
 
-        if self.rect.y < 500:
+        if self.rect.y < ALTO_VENTANA:
             self.rect.y += self.gravity
+
 
 
     def movimiento_horizontal_de_la_camara(self, valor):

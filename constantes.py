@@ -13,3 +13,6 @@ settings = cargar_settings("config/settings.json").get("configuraciones_generale
 ANCHO_VENTANA = settings.get("ANCHO_VENTANA")
 ALTO_VENTANA = settings.get("ALTO_VENTANA")
 FPS = settings.get("FPS")
+
+niveles = cargar_settings("config/settings.json").get("niveles")
+
