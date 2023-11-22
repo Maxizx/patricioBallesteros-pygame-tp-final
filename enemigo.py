@@ -1,4 +1,4 @@
-from doctest import FAIL_FAST
+
 import pygame as pg
 from constantes import *
 from auxiliar import Auxiliar
@@ -35,15 +35,8 @@ class Enemy:
             self.control("WALK_L")
         if movimientos[pg.K_RIGHT] and not movimientos[pg.K_LEFT]:
             self.control("WALK_R")
-        if movimientos[pg.K_SPACE]:
-            self.control("JUMP_R")
-        if movimientos[pg.K_SPACE] and movimientos[pg.K_LEFT]:
-            self.control("JUMP_L")
         if not movimientos[pg.K_RIGHT] and not movimientos[pg.K_LEFT]:
             self.control("STAY")
-
-
-        self.action = "WALK_R"
 
     def control(self):
         if self.action == "WALK_R":

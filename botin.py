@@ -15,7 +15,11 @@ class Frutas(pg.sprite.Sprite):
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
 
-
+    def update(self):
+        if self.frame < len(self.animation) - 1:
+            self.frame += 1
+        else:
+            self.frame = 0
 
 
         

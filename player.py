@@ -91,7 +91,6 @@ class Player:
                 self.move_y = 0
                 self.direccion = "down"
         
-
         if self.rect[0] < 0:
             self.rect[0] = 0
 
@@ -104,6 +103,13 @@ class Player:
 
         if self.rect.y < ALTO_VENTANA:
             self.rect.y += self.gravity
+        elif self.rect.y > ALTO_VENTANA:
+            print("se cayó fuera del mapa")
+            self.rect.y -= self.rect.y
+            self.rect.x -= self.rect.x
+            self.lives -= 1
+
+
 
 
 
