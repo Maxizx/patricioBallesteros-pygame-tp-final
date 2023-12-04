@@ -1,0 +1,141 @@
+{
+    "configuraciones_generales": {
+        "ANCHO_VENTANA": 1500,
+        "ALTO_VENTANA": 800,
+        "FPS": 60,
+        "FOLDER_MUSIC": "/home/pato/Datos/PC/Documents/UTN/tp_pygame/audio",
+        "VOLUMEN_DEFAULT": 0.01
+    },
+    "niveles": {
+        "level_0": {
+            "jugador": {
+                "x": 200,
+                "y": 200,
+                "speed_walk": 4,
+                "speed_run": 8,
+                "gravity": 8,
+                "jump": 14
+            },
+            
+            "0_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX                  ",
+                "       XX                ",
+                "                         ",
+                "                         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXX     XXXXXXXXXXXXX"
+            ],
+            "1_escenario": [
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ],
+            "2_escenario": [
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "                         ",
+                "        XXX     X        ",
+                "                X        ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ]
+        },
+        "level_1": {
+            "jugador": {
+                "x": 200,
+                "y": 200,
+                "speed_walk": 4,
+                "speed_run": 8,
+                "gravity": 8,
+                "jump": 14
+            },
+            "0_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX      XXXXX       ",
+                "       XX                ",
+                "        XXXX             ",
+                "            XXXX         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ],
+            "1_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX                  ",
+                "       XX                ",
+                "                         ",
+                "                         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ],
+            "2_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX      XXXXX       ",
+                "       XX                ",
+                "        XXXX             ",
+                "            XXXX         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ]
+        },
+        "level_2": {
+            "jugador": {
+                "x": 200,
+                "y": 200,
+                "speed_walk": 4,
+                "speed_run": 8,
+                "gravity": 8,
+                "jump": 14
+            },
+            "0_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX      XXXXX       ",
+                "       XX                ",
+                "        XXXX             ",
+                "            XXXX         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ],
+            "1_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX      XXXXX       ",
+                "       XX                ",
+                "        XXXX             ",
+                "            XXXX         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ],
+            "2_escenario": [
+                "                         ",
+                "                         ",
+                "  XXXXX      XXXXX       ",
+                "       XX                ",
+                "        XXXX             ",
+                "            XXXX         ",
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+            ]
+        }
+    }
+}
