@@ -26,6 +26,10 @@ class Auxiliar:
 
     @staticmethod
     def get_image_SurfaceFromSpriteSheet(path, columnas, filas,seleccion_columna ,seleccion_fila, step=1):
+        """  
+        Obtener una imagen de un spritsheet
+        """
+        
         imagen = None
         surface_imagen = pg.image.load(path)
         fotograma_ancho = int(surface_imagen.get_width() / columnas)
@@ -43,3 +47,18 @@ class Auxiliar:
                         )
                         imagen = surface_fotograma
         return imagen
+
+
+    def load_image_and_scale(ruta:str, medida_del_ancho:int, medida_de_lo_alto:int):
+        """  
+        Recibe como parametro la ruta en donde se ubica el archivo, las medidas de alto como de ancho que se desea.
+         Carga una imagen y la reescala a las medidas cargas por paremetros. 
+          -> retorna la imagen reescalada
+        """
+        imagen_carga = pg.image.load(ruta)
+        medidas_para_escalar= (medida_del_ancho,medida_de_lo_alto)
+        imagen_escalada = pg.transform.scale(imagen_carga,medidas_para_escalar)
+        
+        return imagen_escalada
+    
+

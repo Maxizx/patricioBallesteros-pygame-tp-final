@@ -6,7 +6,7 @@ from constantes import *
 
 
 class Player:
-    def __init__(self, x, y, speed_walk, speed_run, gravity, jump) -> None:
+    def __init__(self, diccionario) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Idle (32x32).png", 11, 1)
@@ -15,16 +15,18 @@ class Player:
         self.frame = 0
         self.lives = 5
         self.score = 0
-        self.move_x = x
-        self.move_y = y
-        self.speed_walk = speed_walk
-        self.speed_run = speed_run
-        self.gravity = gravity
-        self.jump = jump
+        self.move_x = diccionario["x"]
+        self.move_y = diccionario["y"]
+        self.speed_walk = diccionario["speed_walk"]
+        self.speed_run = diccionario["speed_run"]
+        self.gravity = diccionario["gravity"]
+        self.jump = diccionario["jump"]
         self.animation = self.stay
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
         self.direccion = "right"
+        self.cooldown_de_hit = 1000
+        self.tiempo_entre_hits = pg.time.get_ticks()
 
         self.is_jump = False
 
@@ -109,8 +111,12 @@ class Player:
             self.rect.x -= self.rect.x
             self.lives -= 1
 
+    def colision_con_enemigo(self,objeto):
 
-
+        if self.rect.colliderect(objeto):
+            if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
+                self.lives -=1
+                self.tiempo_entre_hits = pg.time.get_ticks()
 
 
     def movimiento_horizontal_de_la_camara(self, valor):
@@ -120,18 +126,23 @@ class Player:
 
 
     def colision_con_objetos(self,objeto):
-
         if self.rect.colliderect(objeto):
             if self.rect[1] < objeto.top:
+                # print("choqué abajo")
                 self.rect.bottom = objeto.top
-            elif self.rect[1] < objeto.bottom:
-                self.rect.top = objeto.bottom  
-                # if self.rect.y < 500:
-                #     self.rect.y += self.gravity
+
+            elif self.rect[1] < objeto.bottom and self.rect.bottom > objeto.bottom:
+                self.rect.top = objeto.bottom
+                print("choqué arriba")
             elif self.rect[0] < objeto.left:
                 self.rect.right = objeto.left
+                # print("choqué a la derecha")
             elif self.rect[0] <= objeto.right:
                 self.rect.left = objeto.right
+                # print("choqué a la izquiera")
+
+
+
 
 
     def draw(self, screen):

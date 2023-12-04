@@ -16,3 +16,9 @@ FPS = settings.get("FPS")
 
 niveles = cargar_settings("config/settings.json").get("niveles")
 
+numero = 0
+nivel_config = niveles.get(f"level_{numero}")
+config_player = dict(nivel_config.get("jugador"))
+
+
+

@@ -14,6 +14,7 @@ class Frutas(pg.sprite.Sprite):
         self.animation = self.stay
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
+        self.grupo_frutas = pg.sprite.Group()
 
     def update(self):
         if self.frame < len(self.animation) - 1:
@@ -21,12 +22,11 @@ class Frutas(pg.sprite.Sprite):
         else:
             self.frame = 0
 
-
         
     def draw(self,pantalla):
         self.rect.x = self.ubicacion_en_x
         self.rect.y = self.ubicacion_en_y
-        self.image = self.animation[self.frame] 
+        self.image = self.animation[self.frame]
         pantalla.blit(self.image,self.rect)
 
     def colision_con_fruta(self,objeto):
