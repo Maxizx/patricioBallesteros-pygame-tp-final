@@ -15,7 +15,6 @@ class Enemy(pg.sprite.Sprite):
         # self.jump_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, False, 2)
         # self.jump_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, True, 2)
         self.frame = 0
-
         self.move_x = x
         self.move_y = y
         self.speed_walk = speed_walk
@@ -33,7 +32,6 @@ class Enemy(pg.sprite.Sprite):
         if izquierda == True:
             # Enemy.control("WALK_L")
             self.move_x = -self.speed_walk
-
         else:
             # Enemy.control("WALK_R")
             self.move_x = self.speed_walk
@@ -85,7 +83,6 @@ class Enemy(pg.sprite.Sprite):
             elif self.rect[0] <= objeto.right:
                 self.rect.left = objeto.right
                 self.caminar_direccion(False)
-
 
 
     def draw(self, screen):

@@ -7,10 +7,8 @@ from niveles.plataforma import *
 
 #ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO
 
-screen = pg.display.set_mode((ANCHO_VENTANA, ALTO_VENTANA))
 
-pg.init()
-clock = pg.time.Clock()
+
 
 # class Game():
 #     def __init__(self) -> None:
@@ -35,36 +33,34 @@ from player import Player
 
 class GameManager:
     def __init__(self):
-        pg.init()
         pg.font.init()
+        pg.init()
         pg.display.set_caption("Island Adventure")
         self.screen_width = ANCHO_VENTANA
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pg.time.Clock()
         self.frame_rate = FPS
-        self.player = Player(self.screen, 3.5)
         self.debug = False
         self.win = False
         self.win_level = False
-        self.musica_de_fondo = audio("self.musica_de_fondo",repetir=-1)
+        self.musica_de_fondo = audio("musica_de_fondo",repetir=-1)
         self.fuente = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",30)
         self.fuente_1 = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",29)   
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
+        self.player_1 = Player(config_player)
+        self.enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
+        self.fruta_1 = Frutas(200,300)
+
 
 
     def run(self):
         """
         Ejecuta el bucle principal del juego.
         """
-        player_1 = Player(config_player)
-        enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
-        fruta_1 = Frutas(200,300)
-
         while True:
-
             relog = pg.time.get_ticks()//1000
             
             for event in pg.event.get():
@@ -85,50 +81,52 @@ class GameManager:
                     self.musica_de_fondo.control_volumen(False)
                     print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
                 
-                player_1.selector_de_movimiento(lista_teclas_presionadas)
-                enemigo_1.caminar_direccion(True)
+                self.player_1.selector_de_movimiento(lista_teclas_presionadas)
+                self.enemigo_1.caminar_direccion(True)
 
-            # camara_x = -player_1.rect[0] % self.imagen_fondo2.get_rect().width
-            camara_x = -player_1.rect[0] % ANCHO_VENTANA
-            #print(player_1.rect)
+            # camara_x = -self.player_1.rect[0] % self.imagen_fondo2.get_rect().width
+            camara_x = -self.player_1.rect[0] % ANCHO_VENTANA
+            #print(self.player_1.rect)
             
-            #camara_x = -player_1.move_x
-            screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(player_1.movimiento_horizontal_de_la_camara(self.imagen_fondo2.get_rect().width),0)))
+            #camara_x = -self.player_1.move_x
+            self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(self.player_1.movimiento_horizontal_de_la_camara(self.imagen_fondo2.get_rect().width),0)))
             if camara_x < ANCHO_VENTANA:
-                screen.blit(self.imagen_fondo2,(camara_x,0))
+                self.screen.blit(self.imagen_fondo2,(camara_x,0))
 
-            if player_1.lives == 0:
+            if self.player_1.lives == 0:
                 # game_over()
                 print("Game Over")
                 pg.quit()
                 sys.exit()
 
             for muro in muros:
-                player_1.colision_con_objetos(muro)
-                enemigo_1.colision_con_objetos(muro)
-
-            fruta_1.colision_con_fruta(player_1)
-            player_1.colision_con_enemigo(enemigo_1)
+                self.player_1.colision_con_objetos(muro)
+                self.enemigo_1.colision_con_objetos(muro)
 
             
-            dibujar_muros(screen,muros)
-            bloque_de_abajo.draw_bloque(screen)
-            enemigo_1.update()
-            enemigo_1.draw(screen)
-            player_1.update()
-            player_1.draw(screen)
-            fruta_1.update()
-            fruta_1.draw(screen)
+            self.fruta_1.colision_con_fruta(self.player_1)
+            self.player_1.colision_con_enemigo(self.enemigo_1)
+
+            
+            dibujar_muros(self.screen,muros)
+            bloque_de_abajo.draw_bloque(self.screen)
+            self.enemigo_1.update()
+            self.enemigo_1.draw(self.screen)
+            self.player_1.update()
+            self.player_1.draw(self.screen)
+            self.fruta_1.update()
+            self.fruta_1.draw(self.screen)
 
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
-            contador_vidas = self.fuente_1.render(str(player_1.lives),False,(0,0,0))
-            screen.blit(self.vidas,(80,13))
-            screen.blit(contador_vidas,(100,30))
-            screen.blit(contador,(150,30))
+            contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
+            self.screen.blit(self.vidas,(80,13))
+            self.screen.blit(contador_vidas,(100,30))
+            self.screen.blit(contador,(150,30))
 
             # enemigos update
             # player dibujarlo
             # dibujar todo el nivel
+
 
             pg.display.flip()
 
