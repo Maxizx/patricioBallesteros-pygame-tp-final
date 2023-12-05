@@ -24,6 +24,7 @@ class Enemy(pg.sprite.Sprite):
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
         self.direccion = "right"
+        self.grupo_enemigos = pg.sprite.Group()
 
         self.is_jump = False
 

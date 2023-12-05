@@ -102,11 +102,9 @@ class GameManager:
             for muro in muros:
                 self.player_1.colision_con_objetos(muro)
                 self.enemigo_1.colision_con_objetos(muro)
-
             
             self.fruta_1.colision_con_fruta(self.player_1)
             self.player_1.colision_con_enemigo(self.enemigo_1)
-
             
             dibujar_muros(self.screen,muros)
             bloque_de_abajo.draw_bloque(self.screen)

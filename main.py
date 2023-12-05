@@ -1,4 +1,4 @@
-from game import GameManager
+from inicio import *
 """ # from inicio import *
 
 # pg.font.init()
@@ -102,5 +102,4 @@ from game import GameManager
  """
 
 if __name__ == '__main__':
-    game = GameManager()
-    game.run()
+    main_menu()

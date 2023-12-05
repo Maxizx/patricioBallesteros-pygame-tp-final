@@ -21,7 +21,6 @@ class Frutas(pg.sprite.Sprite):
             self.frame += 1
         else:
             self.frame = 0
-
         
     def draw(self,pantalla):
         self.rect.x = self.ubicacion_en_x
