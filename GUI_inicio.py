@@ -1,7 +1,6 @@
 import pygame as pg
-from constantes import *
+from constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from botones import Button as Button
-from main import  *
 from game import GameManager
 # from main import game
 

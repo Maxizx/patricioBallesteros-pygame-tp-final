@@ -1,9 +1,11 @@
 from botin import Frutas
-from player import * 
+from player import Player 
 from enemigo import Enemy
-from musica import *
+from musica import audio
 from constantes import *
-from niveles.plataforma import *
+from niveles.plataforma import (construir_mapas,bloque)
+from auxiliar import Auxiliar
+import random as rd
 
 #ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO
 
@@ -31,7 +33,8 @@ import pygame as pg
 import sys
 from player import Player
 
-class GameManager:
+
+class GameManager(Frutas,pg.sprite.Sprite):
     def __init__(self):
         pg.font.init()
         pg.init()
@@ -52,9 +55,12 @@ class GameManager:
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
         self.player_1 = Player(config_player)
         self.enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
-        self.fruta_1 = Frutas(200,300)
-
-
+        # self.fruta_1 = Frutas(200,300)
+        self.fruta = Frutas()
+        self.lista_de_niveles = niveles
+        self.nivel = 0
+        self.escenario =  0
+        self.mapas = construir_mapas()
 
     def run(self):
         """
@@ -93,27 +99,30 @@ class GameManager:
             if camara_x < ANCHO_VENTANA:
                 self.screen.blit(self.imagen_fondo2,(camara_x,0))
 
-            if self.player_1.lives == 0:
-                # game_over()
-                print("Game Over")
-                pg.quit()
-                sys.exit()
+            self.game_over()
 
-            for muro in muros:
-                self.player_1.colision_con_objetos(muro)
-                self.enemigo_1.colision_con_objetos(muro)
+
+            # for muro in muros:
+            #     self.player_1.colision_con_objetos(muro)
+            #     self.enemigo_1.colision_con_objetos(muro)
+            # self.colision_muros()
             
-            self.fruta_1.colision_con_fruta(self.player_1)
+            self.fruta.spawn_frutas
+
+            # self.fruta_1.colision_con_fruta(self.player_1)
             self.player_1.colision_con_enemigo(self.enemigo_1)
             
-            dibujar_muros(self.screen,muros)
-            bloque_de_abajo.draw_bloque(self.screen)
+            self.cargar_mapa()
+            # dibujar_muros(self.screen,muros)
             self.enemigo_1.update()
             self.enemigo_1.draw(self.screen)
             self.player_1.update()
             self.player_1.draw(self.screen)
-            self.fruta_1.update()
-            self.fruta_1.draw(self.screen)
+            self.fruta.grupo_frutas.update()
+            self.fruta.grupo_frutas.draw(self.screen)
+
+            # self.fruta_1.update()
+            # self.fruta_1.draw(self.screen)
 
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
@@ -129,4 +138,36 @@ class GameManager:
             pg.display.flip()
 
 
-#ROTO
+    def game_over(self):
+        if self.player_1.lives == 0:
+            # game_over()
+            print("Game Over")
+            pg.quit()
+            sys.exit()
+
+    def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
+        for numero_de_nivel in range(len(lista_de_niveles)):
+            if numero_de_nivel == nivel_elegido:
+                nivel = f"level_{numero_de_nivel}"
+                level = lista_de_niveles.get(nivel)
+
+                for escenario in range(len(nivel)- 1):
+                    if escenario == escenario_elegido:
+                        # print(f"nivel : {nivel}, escenario: {escenario}")
+                        escenario_a_cargar = level.get(f"{escenario}_escenario")
+                        return escenario_a_cargar
+
+    def cargar_mapa(self):
+        self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
+        self.muros =self.mapas.construir_mapa(self.mapa)
+        self.mapas.dibujar_muros(self.screen,self.muros)
+
+    def pasar_escenario(self):
+        self.escenario += 1
+        self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
+        
+    # def colision_muros(self):
+    #     for muro in self.muros:
+    #         self.player_1.colision_con_objetos(muro)
+    #         self.enemigo_1.colision_con_objetos(muro)
+

@@ -1,6 +1,4 @@
-from doctest import FAIL_FAST
 import pygame as pg
-from constantes import *
 from auxiliar import Auxiliar
 from constantes import *
 
