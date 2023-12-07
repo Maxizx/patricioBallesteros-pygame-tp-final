@@ -7,6 +7,7 @@ from niveles.plataforma import (construir_mapas,bloque)
 from auxiliar import Auxiliar
 import random as rd
 
+
 #ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO
 
 
@@ -98,8 +99,9 @@ class GameManager(Frutas,pg.sprite.Sprite):
             self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(self.player_1.movimiento_horizontal_de_la_camara(self.imagen_fondo2.get_rect().width),0)))
             if camara_x < ANCHO_VENTANA:
                 self.screen.blit(self.imagen_fondo2,(camara_x,0))
-
-            self.game_over()
+                
+            if self.player_1.lives == 0:
+                self.game_over()
 
 
             # for muro in muros:
@@ -139,7 +141,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
 
     def game_over(self):
-        if self.player_1.lives == 0:
+        
             # game_over()
             print("Game Over")
             pg.quit()
