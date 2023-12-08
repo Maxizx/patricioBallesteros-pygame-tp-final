@@ -55,13 +55,18 @@ class GameManager(Frutas,pg.sprite.Sprite):
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
         self.player_1 = Player(config_player)
-        self.enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
+        # self.enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
         # self.fruta_1 = Frutas(200,300)
         self.fruta = Frutas()
+        self.enemigo = Enemy(0,0)
         self.lista_de_niveles = niveles
         self.nivel = 0
         self.escenario =  0
         self.mapas = construir_mapas()
+        self.fruta.spawn_frutas()
+        self.enemigo.spawn_enemigos()
+
+
 
     def run(self):
         """
@@ -69,6 +74,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
         """
         while True:
             relog = pg.time.get_ticks()//1000
+            self.musica_de_fondo.reproducir_audio()
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -76,7 +82,6 @@ class GameManager(Frutas,pg.sprite.Sprite):
                     sys.exit()
 
                 # self.musica_de_fondo.play(-1)
-                self.musica_de_fondo.reproducir_audio()
                 lista_teclas_presionadas = pg.key.get_pressed()
                 if lista_teclas_presionadas[pg.K_i]:
                     # main_menu()
@@ -89,7 +94,8 @@ class GameManager(Frutas,pg.sprite.Sprite):
                     print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
                 
                 self.player_1.selector_de_movimiento(lista_teclas_presionadas)
-                self.enemigo_1.caminar_direccion(True)
+                self.enemigo.caminar_direccion(True)
+                
 
             # camara_x = -self.player_1.rect[0] % self.imagen_fondo2.get_rect().width
             camara_x = -self.player_1.rect[0] % ANCHO_VENTANA
@@ -103,25 +109,19 @@ class GameManager(Frutas,pg.sprite.Sprite):
             if self.player_1.lives == 0:
                 self.game_over()
 
-
-            # for muro in muros:
-            #     self.player_1.colision_con_objetos(muro)
-            #     self.enemigo_1.colision_con_objetos(muro)
-            # self.colision_muros()
             
-            self.fruta.spawn_frutas
 
-            # self.fruta_1.colision_con_fruta(self.player_1)
-            self.player_1.colision_con_enemigo(self.enemigo_1)
+            self.fruta.colision_con_fruta(self.player_1)
+            self.enemigo.colision_con_enemigo(self.player_1)
             
             self.cargar_mapa()
             # dibujar_muros(self.screen,muros)
-            self.enemigo_1.update()
-            self.enemigo_1.draw(self.screen)
+            self.enemigo.grupo_enemigos.update()
+            self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
             self.player_1.draw(self.screen)
-            self.fruta.grupo_frutas.update()
             self.fruta.grupo_frutas.draw(self.screen)
+            self.fruta.grupo_frutas.update()
 
             # self.fruta_1.update()
             # self.fruta_1.draw(self.screen)
@@ -131,7 +131,6 @@ class GameManager(Frutas,pg.sprite.Sprite):
             self.screen.blit(self.vidas,(80,13))
             self.screen.blit(contador_vidas,(100,30))
             self.screen.blit(contador,(150,30))
-
             # enemigos update
             # player dibujarlo
             # dibujar todo el nivel
@@ -161,15 +160,17 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
     def cargar_mapa(self):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
-        self.muros =self.mapas.construir_mapa(self.mapa)
+        self.muros = self.mapas.construir_mapa(self.mapa)
         self.mapas.dibujar_muros(self.screen,self.muros)
+        self.colision_muros(self.muros)
 
     def pasar_escenario(self):
         self.escenario += 1
         self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         
-    # def colision_muros(self):
-    #     for muro in self.muros:
-    #         self.player_1.colision_con_objetos(muro)
-    #         self.enemigo_1.colision_con_objetos(muro)
+    def colision_muros(self,muros):
+        for muro in muros:
+            # self.mapas.grupo_bloques.add(muro)
+            self.player_1.colision_con_objetos(muro)
+            self.enemigo.colision_con_objetos(muro)
 

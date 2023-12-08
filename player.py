@@ -3,7 +3,8 @@ from auxiliar import Auxiliar
 from constantes import *
 
 
-class Player:
+
+class Player(pg.sprite.Sprite):
     def __init__(self, diccionario) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
@@ -109,12 +110,15 @@ class Player:
             self.rect.x -= self.rect.x
             self.lives -= 1
 
-    def colision_con_enemigo(self,objeto):
-
-        if self.rect.colliderect(objeto):
-            if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
-                self.lives -=1
-                self.tiempo_entre_hits = pg.time.get_ticks()
+    # def colision_con_enemigo(self,objeto):
+    #     if pg.sprite.spritecollide(objeto,self.grupo_enemigos):
+    #         if self.rect.colliderect(objeto):
+    #             if objeto.rect.bottom < self.rect.top:
+    #                 print("pisó al enemigo")
+    #             else:
+    #                 if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
+    #                     self.lives -=1
+    #                     self.tiempo_entre_hits = pg.time.get_ticks()
 
 
     def movimiento_horizontal_de_la_camara(self, valor):

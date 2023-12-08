@@ -75,10 +75,6 @@ class construir_mapas(bloque,pg.sprite.Sprite):
             self.dibujar_muro(superficie, m)
 
 
-# mapa = eleccion_nivel(niveles,0,escenario)
-
-# muros = construir_mapa(mapa)
-
 
 
 
