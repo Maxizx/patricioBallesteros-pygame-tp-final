@@ -28,6 +28,7 @@ class Enemy(pg.sprite.Sprite):
         self.grupo_enemigos = pg.sprite.Group()
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits = pg.time.get_ticks()
+        self.move_x += self.speed_walk
 
         self.is_jump = False
 
@@ -39,8 +40,6 @@ class Enemy(pg.sprite.Sprite):
         else:
             # Enemy.control("WALK_R")
             self.move_x = self.speed_walk
-
-
 
 
     def update(self):

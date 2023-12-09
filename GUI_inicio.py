@@ -2,7 +2,7 @@ import pygame as pg
 from constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from botones import Button as Button
 from game import GameManager
-# from main import game
+
 
 # if __name__ == "__main__":
 
@@ -124,15 +124,13 @@ def niveles():
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     main_menu()
                 if level_one.checkForInput(PLAY_MOUSE_POS):
-                    game = GameManager()
-                    game.run()
+                    game_level = 0
                 if level_two.checkForInput(PLAY_MOUSE_POS):
-                    game = GameManager()
-                    game.run()
+                    game_level = 1
                 if level_three.checkForInput(PLAY_MOUSE_POS):
-                    game = GameManager()
-                    game.run()
-
+                    game_level = 2
+                game = GameManager(game_level)
+                game.run()
         pg.display.update()
     
 def play():

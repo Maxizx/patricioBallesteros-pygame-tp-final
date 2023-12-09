@@ -1,3 +1,4 @@
+
 from botin import Frutas
 from player import Player 
 from enemigo import Enemy
@@ -8,18 +9,12 @@ from auxiliar import Auxiliar
 import random as rd
 
 
-#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO#ROTO
-
-
 
 
 # class Game():
 #     def __init__(self) -> None:
 #         self.win = False
 #         self.coordenadas_de_inicio = 0
-
-#     def colision():
-#         pass    
 
 #     def gano():
 #         match "level":
@@ -36,7 +31,7 @@ from player import Player
 
 
 class GameManager(Frutas,pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, nivel=0):
         pg.font.init()
         pg.init()
         pg.display.set_caption("Island Adventure")
@@ -59,8 +54,8 @@ class GameManager(Frutas,pg.sprite.Sprite):
         # self.fruta_1 = Frutas(200,300)
         self.fruta = Frutas()
         self.enemigo = Enemy(0,0)
-        self.lista_de_niveles = niveles
-        self.nivel = 0
+        self.lista_de_niveles = lista_niveles
+        self.nivel = nivel
         self.escenario =  0
         self.mapas = construir_mapas(0,0)
         self.fruta.spawn_frutas()
@@ -83,7 +78,6 @@ class GameManager(Frutas,pg.sprite.Sprite):
                     pg.quit()
                     sys.exit()
 
-                # self.musica_de_fondo.play(-1)
                 lista_teclas_presionadas = pg.key.get_pressed()
                 if lista_teclas_presionadas[pg.K_i]:
                     # main_menu()
@@ -109,7 +103,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
                 self.screen.blit(self.imagen_fondo2,(camara_x,0))
                 
             if self.player_1.lives == 0:
-                self.game_over()
+                self.gameover()
 
             self.colision_con_objetos_enemigo(self.enemigo.grupo_enemigos)
             self.colision_con_objetos(self.player_1)
@@ -118,6 +112,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
             self.colision_con_enemigo(self.player_1)
             
             self.enemigo.grupo_enemigos.update()
+            self.enemigo
             self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
             self.player_1.draw(self.screen)
@@ -130,10 +125,13 @@ class GameManager(Frutas,pg.sprite.Sprite):
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
             contador_score_jugador = self.fuente_1.render(f"Score: {str(self.player_1.score)}",False,(255,255,255),(0,0,0) )
+            nivel = self.fuente.render(f"NIVEL: {str(self.nivel + 1)}",False,(255,255,255),(0,0,0) )
             self.screen.blit(self.vidas,(80,13))
             self.screen.blit(contador_vidas,(100,30))
             self.screen.blit(contador,(150,30))
             self.screen.blit(contador_score_jugador,(ANCHO_VENTANA-300,30))
+            self.screen.blit(nivel,(ANCHO_VENTANA/2,30))
+            
             # enemigos update
             # player dibujarlo
             # dibujar todo el nivel
@@ -142,7 +140,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
             pg.display.flip()
 
 
-    def game_over(self):
+    def gameover(self):
         
             # game_over()
             print("Game Over")
