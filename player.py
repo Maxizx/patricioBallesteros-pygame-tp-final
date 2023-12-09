@@ -127,21 +127,22 @@ class Player(pg.sprite.Sprite):
         return camara_x
 
 
-    def colision_con_objetos(self,objeto):
-        if self.rect.colliderect(objeto):
-            if self.rect[1] < objeto.top:
-                # print("choqué abajo")
-                self.rect.bottom = objeto.top
+    # def colision_con_objetos(self,objeto):
+    #     if pg.sprite.spritecollide(self.rect,):
+    #     # if self.rect.colliderect(objeto):
+    #         if self.rect[1] < objeto.top:
+    #             # print("choqué abajo")
+    #             self.rect.bottom = objeto.top
 
-            elif self.rect[1] < objeto.bottom and self.rect.bottom > objeto.bottom:
-                self.rect.top = objeto.bottom
-                print("choqué arriba")
-            elif self.rect[0] < objeto.left:
-                self.rect.right = objeto.left
-                # print("choqué a la derecha")
-            elif self.rect[0] <= objeto.right:
-                self.rect.left = objeto.right
-                # print("choqué a la izquiera")
+    #         elif self.rect[1] < objeto.bottom and self.rect.bottom > objeto.bottom:
+    #             self.rect.top = objeto.bottom
+    #             print("choqué arriba")
+    #         elif self.rect[0] < objeto.left:
+    #             self.rect.right = objeto.left
+    #             # print("choqué a la derecha")
+    #         elif self.rect[0] <= objeto.right:
+    #             self.rect.left = objeto.right
+    #             # print("choqué a la izquiera")
 
 
 

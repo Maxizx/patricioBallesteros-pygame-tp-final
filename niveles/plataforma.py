@@ -1,5 +1,6 @@
 import pygame as pg
 from constantes import *
+from auxiliar import Auxiliar
 
 
 
@@ -40,33 +41,28 @@ class bloque(pg.sprite.Sprite):
 
 
 class construir_mapas(pg.sprite.Sprite):
-    def __init__(self) -> None:
+    def __init__(self,x,y) -> None:
         super().__init__()
-        self.bloque_plataforma = bloque(0,0)
+        self.image = pg.image.load("images/locations/0.png")
+        # self.image = Auxiliar.get_image_SurfaceFromSpriteSheet("images/locations/Terrain (16x16).png",4,3,seleccion_columna=1,seleccion_fila=0,step=1)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
         self.grupo_bloques = pg.sprite.Group()
 
-
-    # def dibujar_muro(self,superficie, rectangulo):
-
-    #     # pg.draw.rect(superficie, (0,0,0), rectangulo)
-    #     superficie.blit(self.bloque_plataforma.imagen_del_bloque,self.bloque_plataforma.imagen_del_bloque.get_rect(topleft = (rectangulo.x,rectangulo.y)))
-    #     # for valor in rectangulo.values():
-    #     #     superficie.blit(self.bloque_plataforma.imagen_del_bloque,self.bloque_plataforma.imagen_del_bloque.get_rect(topleft = (valor["x"],valor["y"])))
-
     def construir_mapa(self,mapa):
-        # muros = []
         x = 0
         y = 0
         for muro in mapa:
             for ladrillo in muro:
                 if ladrillo == "X":
                     # muros.append(pg.Rect(x, y, 60, 60))
-                    self.bloque_plataforma = bloque(x,y)
-                    self.grupo_bloques.add(self.bloque_plataforma)
+                    bloque_plataforma = construir_mapas(x,y)
+                    self.grupo_bloques.add(bloque_plataforma)
 
-                x += self.bloque_plataforma.imagen_del_bloque.get_width()
+                x += self.image.get_width()
             x = 0
-            y += self.bloque_plataforma.imagen_del_bloque.get_height()
+            y += self.image.get_height()
         
 
     # def dibujar_muros(self,superficie, muros):

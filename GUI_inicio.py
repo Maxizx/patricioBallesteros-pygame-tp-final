@@ -122,7 +122,16 @@ def niveles():
                 
             if event.type == pg.MOUSEBUTTONDOWN:
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
-                    pass
+                    main_menu()
+                if level_one.checkForInput(PLAY_MOUSE_POS):
+                    game = GameManager()
+                    game.run()
+                if level_two.checkForInput(PLAY_MOUSE_POS):
+                    game = GameManager()
+                    game.run()
+                if level_three.checkForInput(PLAY_MOUSE_POS):
+                    game = GameManager()
+                    game.run()
 
         pg.display.update()
     

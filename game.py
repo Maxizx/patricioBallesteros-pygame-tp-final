@@ -3,7 +3,7 @@ from player import Player
 from enemigo import Enemy
 from musica import audio
 from constantes import *
-from niveles.plataforma import (construir_mapas,bloque)
+from niveles.plataforma import (construir_mapas)
 from auxiliar import Auxiliar
 import random as rd
 
@@ -62,9 +62,11 @@ class GameManager(Frutas,pg.sprite.Sprite):
         self.lista_de_niveles = niveles
         self.nivel = 0
         self.escenario =  0
-        self.mapas = construir_mapas()
+        self.mapas = construir_mapas(0,0)
         self.fruta.spawn_frutas()
         self.enemigo.spawn_enemigos()
+        self.cargar_mapa()
+
 
 
 
@@ -110,11 +112,10 @@ class GameManager(Frutas,pg.sprite.Sprite):
                 self.game_over()
 
             
-
+            self.colision_con_objetos(self.player_1)
             self.fruta.colision_con_fruta(self.player_1)
             self.enemigo.colision_con_enemigo(self.player_1)
             
-            self.cargar_mapa()
             # dibujar_muros(self.screen,muros)
             self.enemigo.grupo_enemigos.update()
             self.enemigo.grupo_enemigos.draw(self.screen)
@@ -122,6 +123,8 @@ class GameManager(Frutas,pg.sprite.Sprite):
             self.player_1.draw(self.screen)
             self.fruta.grupo_frutas.draw(self.screen)
             self.fruta.grupo_frutas.update()
+            self.mapas.grupo_bloques.draw(self.screen)
+            self.mapas.grupo_bloques.update()
 
             # self.fruta_1.update()
             # self.fruta_1.draw(self.screen)
@@ -161,18 +164,27 @@ class GameManager(Frutas,pg.sprite.Sprite):
     def cargar_mapa(self):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         self.muros = self.mapas.construir_mapa(self.mapa)
-        # self.mapas.dibujar_muros(self.screen,self.muros)
-        self.mapas.grupo_bloques.draw(self.screen)
-        self.mapas.grupo_bloques.update()
-        self.colision_muros(self.muros)
+
 
     def pasar_escenario(self):
         self.escenario += 1
         self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         
-    def colision_muros(self,muros):
-        for muro in muros:
-            # self.mapas.grupo_bloques.add(muro)
-            self.player_1.colision_con_objetos(muro)
-            self.enemigo.colision_con_objetos(muro)
 
+    def colision_con_objetos(self,objeto):
+        bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
+        if bloque_colisiona:
+        # if self.rect.colliderect(objeto):
+            if objeto.rect[1] < bloque_colisiona.rect.top and objeto.rect.top < bloque_colisiona.rect.top :
+                objeto.rect.bottom = bloque_colisiona.rect.top
+                print("chocó")
+
+            elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
+                objeto.rect.top = bloque_colisiona.rect.bottom
+                print("choqué arriba")
+            elif objeto.rect[0] < bloque_colisiona.rect.left:
+                objeto.rect.right = bloque_colisiona.rect.left
+                print("choqué a la derecha")
+            elif objeto.rect[0] <= bloque_colisiona.rect.right:
+                objeto.rect.left = bloque_colisiona.rect.right
+                print("choqué a la izquiera")
