@@ -26,7 +26,6 @@ class Enemy(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.direccion = "right"
         self.grupo_enemigos = pg.sprite.Group()
-        self.heroe = Player
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits = pg.time.get_ticks()
 
@@ -76,24 +75,24 @@ class Enemy(pg.sprite.Sprite):
         camara_x -=  valor
         return camara_x
 
-    def colision_con_enemigo(self,objeto):
-        if pg.sprite.spritecollide(objeto,self.grupo_enemigos,dokill=False):
-            if self.rect.colliderect(objeto):
-                if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
-                    self.heroe.lives -=1
-                    self.tiempo_entre_hits = pg.time.get_ticks()
+    # def colision_con_enemigo(self,objeto):
+    #     if pg.sprite.spritecollide(objeto,self.grupo_enemigos,dokill=False):
+    #         # if self.rect.colliderect(objeto):
+    #             if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
+    #                 self.heroe.lives -=1
+    #                 self.tiempo_entre_hits = pg.time.get_ticks()
 
-    def colision_con_objetos(self,objeto):
+    # def colision_con_objetos(self,objeto):
 
-        if self.rect.colliderect(objeto):
-            if self.rect[1] < objeto.top:
-                self.rect.bottom = objeto.top
-            elif self.rect[0] < objeto.left:
-                self.rect.right = objeto.left
-                self.caminar_direccion(True)
-            elif self.rect[0] <= objeto.right:
-                self.rect.left = objeto.right
-                self.caminar_direccion(False)
+    #     if self.rect.colliderect(objeto):
+    #         if self.rect[1] < objeto.top:
+    #             self.rect.bottom = objeto.top
+    #         elif self.rect[0] < objeto.left:
+    #             self.rect.right = objeto.left
+    #             self.caminar_direccion(True)
+    #         elif self.rect[0] <= objeto.right:
+    #             self.rect.left = objeto.right
+    #             self.caminar_direccion(False)
 
     def spawn_enemigos(self,cantidad_de_enemigos = 4):
         for _ in range(cantidad_de_enemigos):

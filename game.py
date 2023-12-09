@@ -111,13 +111,12 @@ class GameManager(Frutas,pg.sprite.Sprite):
             if self.player_1.lives == 0:
                 self.game_over()
 
-            
+            self.colision_con_objetos_enemigo(self.enemigo.grupo_enemigos)
             self.colision_con_objetos(self.player_1)
             self.colision_con_objetos(self.enemigo)
             self.colision_con_fruta(self.player_1)
-            self.enemigo.colision_con_enemigo(self.player_1)
+            self.colision_con_enemigo(self.player_1)
             
-            # dibujar_muros(self.screen,muros)
             self.enemigo.grupo_enemigos.update()
             self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
@@ -127,8 +126,6 @@ class GameManager(Frutas,pg.sprite.Sprite):
             self.mapas.grupo_bloques.draw(self.screen)
             self.mapas.grupo_bloques.update()
 
-            # self.fruta_1.update()
-            # self.fruta_1.draw(self.screen)
 
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
@@ -183,8 +180,8 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
             elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
                 objeto.rect.top = bloque_colisiona.rect.bottom
-                print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
-                print("choqué arriba")
+                # print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
+                # print("choqué arriba")
             elif objeto.rect[0] < bloque_colisiona.rect.left:
                 objeto.rect.right = bloque_colisiona.rect.left
                 # print("choqué a la derecha")
@@ -192,22 +189,21 @@ class GameManager(Frutas,pg.sprite.Sprite):
                 objeto.rect.left = bloque_colisiona.rect.right
                 # print("choqué a la izquiera")
 
-    def colision_con_objetos(self,objeto):
-        bloque_colisiona =  pg.sprite.spritecolli(objeto,self.mapas.grupo_bloques)
-        if bloque_colisiona:
-        # if self.rect.colliderect(objeto):
-            if objeto.rect[1] <= bloque_colisiona.rect.top :
-                objeto.rect.bottom = bloque_colisiona.rect.top
+    def colision_con_objetos_enemigo(self,grupo_de_sprites):
+        for objeto in grupo_de_sprites:
+            bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
+            if bloque_colisiona:
+            # if self.rect.colliderect(objeto):
+                if objeto.rect[1] < bloque_colisiona.rect.top:
+                    objeto.rect.bottom = bloque_colisiona.rect.top
 
-            elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
-                objeto.rect.top = bloque_colisiona.rect.bottom
-                print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
-                print("choqué arriba")
-            elif objeto.rect[0] < bloque_colisiona.rect.left:
-                objeto.rect.right = bloque_colisiona.rect.left
-                # print("choqué a la derecha")
-            elif objeto.rect[0] <= bloque_colisiona.rect.right:
-                objeto.rect.left = bloque_colisiona.rect.right
+                elif objeto.rect[0] < bloque_colisiona.rect.left:
+                    objeto.rect.right = bloque_colisiona.rect.left
+                    self.enemigo.caminar_direccion(True)
+
+                elif objeto.rect[0] <= bloque_colisiona.rect.right:
+                    objeto.rect.left = bloque_colisiona.rect.right
+                    self.enemigo.caminar_direccion(False)
 
 
     def colision_con_fruta(self,objeto):
@@ -216,3 +212,10 @@ class GameManager(Frutas,pg.sprite.Sprite):
             print("frutaaa")
             self.player_1.score += self.fruta.puntos
             print(self.player_1.score)
+
+    def colision_con_enemigo(self,objeto):
+        if pg.sprite.spritecollide(objeto,self.enemigo.grupo_enemigos,dokill=False):
+            # if self.rect.colliderect(objeto):
+                if (pg.time.get_ticks() - self.enemigo.tiempo_entre_hits) > self.enemigo.cooldown_de_hit:
+                    self.player_1.lives -=1
+                    self.enemigo.tiempo_entre_hits = pg.time.get_ticks()
