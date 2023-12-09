@@ -161,7 +161,9 @@ class GameManager(Frutas,pg.sprite.Sprite):
     def cargar_mapa(self):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         self.muros = self.mapas.construir_mapa(self.mapa)
-        self.mapas.dibujar_muros(self.screen,self.muros)
+        # self.mapas.dibujar_muros(self.screen,self.muros)
+        self.mapas.grupo_bloques.draw(self.screen)
+        self.mapas.grupo_bloques.update()
         self.colision_muros(self.muros)
 
     def pasar_escenario(self):
