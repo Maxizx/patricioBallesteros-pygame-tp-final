@@ -182,7 +182,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
             elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
                 objeto.rect.top = bloque_colisiona.rect.bottom
                 print("choqué arriba")
-            elif objeto.rect[0] < bloque_colisiona.rect.left:
+            elif objeto.rect[0] < bloque_colisiona.rect.left and objeto.rect.left > bloque_colisiona.rect.left:
                 objeto.rect.right = bloque_colisiona.rect.left
                 print("choqué a la derecha")
             elif objeto.rect[0] <= bloque_colisiona.rect.right:

@@ -3,7 +3,7 @@
         "ANCHO_VENTANA": 1280,
         "ALTO_VENTANA": 720,
         "FPS": 60,
-        "FOLDER_MUSIC": "/home/pato/Datos/PC/Documents/UTN/tp_pygame/audio",
+        "FOLDER_MUSIC": "audio",
         "VOLUMEN_DEFAULT": 0.01
     },
     "niveles": {
