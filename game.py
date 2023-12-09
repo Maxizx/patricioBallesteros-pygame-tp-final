@@ -113,7 +113,8 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
             
             self.colision_con_objetos(self.player_1)
-            self.fruta.colision_con_fruta(self.player_1)
+            self.colision_con_objetos(self.enemigo)
+            self.colision_con_fruta(self.player_1)
             self.enemigo.colision_con_enemigo(self.player_1)
             
             # dibujar_muros(self.screen,muros)
@@ -131,9 +132,11 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
+            contador_score_jugador = self.fuente_1.render(f"Score: {str(self.player_1.score)}",False,(255,255,255),(0,0,0) )
             self.screen.blit(self.vidas,(80,13))
             self.screen.blit(contador_vidas,(100,30))
             self.screen.blit(contador,(150,30))
+            self.screen.blit(contador_score_jugador,(ANCHO_VENTANA-300,30))
             # enemigos update
             # player dibujarlo
             # dibujar todo el nivel
@@ -175,16 +178,41 @@ class GameManager(Frutas,pg.sprite.Sprite):
         bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
         if bloque_colisiona:
         # if self.rect.colliderect(objeto):
-            if objeto.rect[1] < bloque_colisiona.rect.top and objeto.rect.top < bloque_colisiona.rect.top :
+            if objeto.rect[1] <= bloque_colisiona.rect.top :
                 objeto.rect.bottom = bloque_colisiona.rect.top
-                print("chocó")
 
             elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
                 objeto.rect.top = bloque_colisiona.rect.bottom
+                print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
                 print("choqué arriba")
-            elif objeto.rect[0] < bloque_colisiona.rect.left and objeto.rect.left > bloque_colisiona.rect.left:
+            elif objeto.rect[0] < bloque_colisiona.rect.left:
                 objeto.rect.right = bloque_colisiona.rect.left
-                print("choqué a la derecha")
+                # print("choqué a la derecha")
             elif objeto.rect[0] <= bloque_colisiona.rect.right:
                 objeto.rect.left = bloque_colisiona.rect.right
-                print("choqué a la izquiera")
+                # print("choqué a la izquiera")
+
+    def colision_con_objetos(self,objeto):
+        bloque_colisiona =  pg.sprite.spritecolli(objeto,self.mapas.grupo_bloques)
+        if bloque_colisiona:
+        # if self.rect.colliderect(objeto):
+            if objeto.rect[1] <= bloque_colisiona.rect.top :
+                objeto.rect.bottom = bloque_colisiona.rect.top
+
+            elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
+                objeto.rect.top = bloque_colisiona.rect.bottom
+                print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
+                print("choqué arriba")
+            elif objeto.rect[0] < bloque_colisiona.rect.left:
+                objeto.rect.right = bloque_colisiona.rect.left
+                # print("choqué a la derecha")
+            elif objeto.rect[0] <= bloque_colisiona.rect.right:
+                objeto.rect.left = bloque_colisiona.rect.right
+
+
+    def colision_con_fruta(self,objeto):
+        if pg.sprite.spritecollide(objeto,group = self.fruta.grupo_frutas,dokill = True):
+        # if self.rect.colliderect(objeto):
+            print("frutaaa")
+            self.player_1.score += self.fruta.puntos
+            print(self.player_1.score)

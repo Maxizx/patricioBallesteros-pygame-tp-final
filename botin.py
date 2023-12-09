@@ -38,8 +38,8 @@ class Frutas(pg.sprite.Sprite):
     #     self.image = self.animation[self.frame]
     #     pantalla.blit(self.image,self.rect)
 
-    def colision_con_fruta(self,objeto):
-        if pg.sprite.spritecollide(objeto,group = self.grupo_frutas,dokill = True):
-        # if self.rect.colliderect(objeto):
-            print("frutaaa")
-            print(self.puntos)
+    # def colision_con_fruta(self,objeto):
+    #     if pg.sprite.spritecollide(objeto,group = self.grupo_frutas,dokill = True):
+    #     # if self.rect.colliderect(objeto):
+    #         print("frutaaa")
+    #         print(self.puntos)
