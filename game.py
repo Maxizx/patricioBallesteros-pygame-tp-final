@@ -6,7 +6,7 @@ from musica import audio
 from constantes import *
 from niveles.plataforma import (construir_mapas)
 from auxiliar import Auxiliar
-import random as rd
+from GUI_inicio import GUI
 
 
 
@@ -30,7 +30,7 @@ import sys
 from player import Player
 
 
-class GameManager(Frutas,pg.sprite.Sprite):
+class GameManager(GUI,Frutas,pg.sprite.Sprite):
     def __init__(self, nivel=0):
         pg.font.init()
         pg.init()
@@ -142,7 +142,7 @@ class GameManager(Frutas,pg.sprite.Sprite):
 
     def gameover(self):
         
-            # game_over()
+            self.game_over()
             print("Game Over")
             pg.quit()
             sys.exit()

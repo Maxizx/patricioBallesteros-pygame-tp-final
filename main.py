@@ -1,4 +1,6 @@
-from GUI_inicio import (main_menu)
+from GUI_inicio import GUI
 
 if __name__ == '__main__':
-    main_menu()
+    interfaz = GUI()
+    interfaz.main_menu()
+    
