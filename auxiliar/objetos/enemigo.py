@@ -1,9 +1,9 @@
 
 import pygame as pg
-from constantes import *
-from auxiliar import Auxiliar
-from constantes import *
-from player import Player
+from auxiliar.constantes import *
+from auxiliar.auxiliar import Auxiliar
+from auxiliar.constantes import *
+from auxiliar.objetos.player import Player
 import random as rd
 
 
@@ -13,8 +13,6 @@ class Enemy(pg.sprite.Sprite):
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Idle (32x32).png", 11, 1)
-        # self.jump_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, False, 2)
-        # self.jump_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, True, 2)
         self.frame = 0
         self.move_x = x
         self.move_y = y
@@ -41,7 +39,6 @@ class Enemy(pg.sprite.Sprite):
             # Enemy.control("WALK_R")
             self.move_x = self.speed_walk
 
-
     def update(self):
         if self.frame < len(self.animation) - 1:
             self.frame += 1
@@ -67,7 +64,6 @@ class Enemy(pg.sprite.Sprite):
 
         if self.rect.y < ALTO_VENTANA:
             self.rect.y += self.gravity
-
 
     def movimiento_horizontal_de_la_camara(self, valor):
         camara_x = -self.rect[0] % ANCHO_VENTANA
@@ -99,8 +95,4 @@ class Enemy(pg.sprite.Sprite):
             self.grupo_enemigos.add(enemigo)
             # print(f"x: {fruta.rect.x} y :{fruta.rect.y}")
             print("Se creó un enemigo nueva")
-            
-    # def draw(self, screen):
-    #     self.image = self.animation[self.frame]
-    #     screen.blit(self.image, self.rect)
 

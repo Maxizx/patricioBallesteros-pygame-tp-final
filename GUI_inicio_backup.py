@@ -1,10 +1,9 @@
 import pygame as pg
-from constantes import (ANCHO_VENTANA,ALTO_VENTANA)
-from botones import Button as Button
+from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
+from interfaz.botones import Button as Button
 from game import GameManager
 
 
-# if __name__ == "__main__":
 
 pg.init()
 
@@ -229,4 +228,3 @@ def main_menu():
 
         pg.display.update()
 
-main_menu()

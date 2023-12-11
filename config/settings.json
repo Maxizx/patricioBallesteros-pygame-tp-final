@@ -9,8 +9,8 @@
     "niveles": {
         "level_0": {
             "jugador": {
-                "x": 200,
-                "y": 200,
+                "x": 0,
+                "y": 0,
                 "speed_walk": 4,
                 "speed_run": 8,
                 "gravity": 8,
@@ -26,7 +26,7 @@
                 "                         ",
                 "       X         XXXXXXXX",
                 "       X                 ",
-                "XXXXXXXX     XXXXXXXXXXXXX"
+                "XXXXXXXXXXX  XXXXXXXXXXXXX"
             ],
             "1_escenario": [
                 "                         ",

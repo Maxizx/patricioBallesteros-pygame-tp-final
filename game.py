@@ -1,15 +1,12 @@
 
-from botin import Frutas
-from player import Player 
-from enemigo import Enemy
-from musica import audio
-from constantes import *
+from auxiliar.objetos.botin import Frutas
+from auxiliar.objetos.player import Player 
+from auxiliar.objetos.enemigo import Enemy
+from auxiliar.musica import audio
+from auxiliar.constantes import *
 from niveles.plataforma import (construir_mapas)
-from auxiliar import Auxiliar
-from GUI_inicio import GUI
-
-
-
+from auxiliar.auxiliar import Auxiliar
+from interfaz.GUI_menus import menu
 
 # class Game():
 #     def __init__(self) -> None:
@@ -27,10 +24,10 @@ from GUI_inicio import GUI
 
 import pygame as pg
 import sys
-from player import Player
+from auxiliar.objetos.player import Player
 
 
-class GameManager(GUI,Frutas,pg.sprite.Sprite):
+class GameManager(pg.sprite.Sprite):
     def __init__(self, nivel=0):
         pg.font.init()
         pg.init()
@@ -82,6 +79,11 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
                 if lista_teclas_presionadas[pg.K_i]:
                     # main_menu()
                     print("sin vidas")
+                if lista_teclas_presionadas[pg.K_p]:
+                        self.debug = True
+                if lista_teclas_presionadas[pg.K_o]:
+                        self.debug = False
+
                 if lista_teclas_presionadas[pg.K_UP]:
                     self.musica_de_fondo.control_volumen(True)
                     print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
@@ -102,7 +104,7 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
             if camara_x < ANCHO_VENTANA:
                 self.screen.blit(self.imagen_fondo2,(camara_x,0))
                 
-            if self.player_1.lives == 0:
+
                 self.gameover()
 
             self.colision_con_objetos_enemigo(self.enemigo.grupo_enemigos)
@@ -110,9 +112,10 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
             self.colision_con_objetos(self.enemigo)
             self.colision_con_fruta(self.player_1)
             self.colision_con_enemigo(self.player_1)
-            
+            # self.losser()
+
+
             self.enemigo.grupo_enemigos.update()
-            self.enemigo
             self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
             self.player_1.draw(self.screen)
@@ -131,7 +134,13 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
             self.screen.blit(contador,(150,30))
             self.screen.blit(contador_score_jugador,(ANCHO_VENTANA-300,30))
             self.screen.blit(nivel,(ANCHO_VENTANA/2,30))
-            
+
+            if self.debug == True:
+                self.dibujar_bloque()
+                self.dibujar_player()
+                self.dibujar_frutas()
+                self.dibujar_enemigos()
+
             # enemigos update
             # player dibujarlo
             # dibujar todo el nivel
@@ -139,13 +148,19 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
 
             pg.display.flip()
 
+    def losser(self):
+        if self.player_1.lives == 0:
+            self.loser = True
+
 
     def gameover(self):
-        
-            self.game_over()
+        if self.player_1.lives == 0:
+            menu_ = menu()
+            menu_.game_over()
             print("Game Over")
-            pg.quit()
-            sys.exit()
+            
+            # pg.quit()
+            # sys.exit()
 
     def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
         for numero_de_nivel in range(len(lista_de_niveles)):
@@ -163,29 +178,30 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         self.muros = self.mapas.construir_mapa(self.mapa)
 
-
     def pasar_escenario(self):
         self.escenario += 1
         self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         
+    # def colision_con_objetos(self,objeto):
+    #     bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
+    #     if bloque_colisiona:
+    #     # if self.rect.colliderect(objeto):
+    #         if objeto.rect.bottom > bloque_colisiona.rect.top and objeto.rect.top < bloque_colisiona.rect.top :
+    #             objeto.rect.bottom = bloque_colisiona.rect.top
 
-    def colision_con_objetos(self,objeto):
-        bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
-        if bloque_colisiona:
-        # if self.rect.colliderect(objeto):
-            if objeto.rect[1] <= bloque_colisiona.rect.top :
-                objeto.rect.bottom = bloque_colisiona.rect.top
+    #         elif objeto.rect.top < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
+    #             objeto.rect.top = bloque_colisiona.rect.bottom
+    #             # print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
+    #             # print("choqué arriba")
+    #         elif objeto.rect.right >= bloque_colisiona.rect.left:
+    #             objeto.rect.bottom = bloque_colisiona.rect.top
+    #             objeto.rect.right = bloque_colisiona.rect.left
 
-            elif objeto.rect[1] < bloque_colisiona.rect.bottom and objeto.rect.bottom > bloque_colisiona.rect.bottom:
-                objeto.rect.top = bloque_colisiona.rect.bottom
-                # print(f"rectangulo Y:{objeto.rect[1]}, Bloque parte de abajo{bloque_colisiona.rect.bottom}")
-                # print("choqué arriba")
-            elif objeto.rect[0] < bloque_colisiona.rect.left:
-                objeto.rect.right = bloque_colisiona.rect.left
-                # print("choqué a la derecha")
-            elif objeto.rect[0] <= bloque_colisiona.rect.right:
-                objeto.rect.left = bloque_colisiona.rect.right
-                # print("choqué a la izquiera")
+    #             # print("choqué a la derecha")
+    #         elif objeto.rect.left <= bloque_colisiona.rect.right:
+    #             objeto.rect.bottom = bloque_colisiona.rect.top
+    #             objeto.rect.left = bloque_colisiona.rect.right
+    #             # print("choqué a la izquiera")
 
     def colision_con_objetos_enemigo(self,grupo_de_sprites):
         for objeto in grupo_de_sprites:
@@ -203,7 +219,6 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
                     objeto.rect.left = bloque_colisiona.rect.right
                     self.enemigo.caminar_direccion(False)
 
-
     def colision_con_fruta(self,objeto):
         if pg.sprite.spritecollide(objeto,group = self.fruta.grupo_frutas,dokill = True):
         # if self.rect.colliderect(objeto):
@@ -217,3 +232,47 @@ class GameManager(GUI,Frutas,pg.sprite.Sprite):
                 if (pg.time.get_ticks() - self.enemigo.tiempo_entre_hits) > self.enemigo.cooldown_de_hit:
                     self.player_1.lives -=1
                     self.enemigo.tiempo_entre_hits = pg.time.get_ticks()
+
+
+    def dibujar_bloque(self):
+        for bloque in self.mapas.grupo_bloques:
+            pg.draw.rect(self.screen,"Black",bloque.rect,2)
+
+    def dibujar_frutas(self):
+        for bloque in self.fruta.grupo_frutas:
+            pg.draw.rect(self.screen,"Blue",bloque.rect,2)
+
+    def dibujar_enemigos(self):
+        for bloque in self.enemigo.grupo_enemigos:
+            pg.draw.rect(self.screen,"Red",bloque.rect,2)
+
+    def dibujar_player(self):
+            pg.draw.rect(self.screen,"Green",self.player_1.rect,2)
+
+
+    def colision_con_objetos(self,player):
+
+        for objeto in self.mapas.grupo_bloques:
+
+            if player.rect.colliderect(objeto):
+                objeto = objeto.rect
+                if player.rect.bottom > objeto.top and player.rect.top < objeto.top:
+                    # print("choqué abajo")
+                    player.rect.bottom = objeto.top
+
+                elif player.rect.top < objeto.bottom and player.rect.bottom > objeto.bottom:
+                    player.rect.top = objeto.bottom
+                    print("choqué arriba")
+
+                elif player.rect.right >= objeto.left and player.rect.left < objeto.left:
+                    player.rect.bottom = objeto.top
+                    player.rect.right = objeto.left
+                    print(f"parte derecha del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
+                    print("choqué a la derecha")
+
+                elif player.rect.left < objeto.right and player.rect.right > objeto.right:
+                    player.rect.bottom = objeto.top
+                    player.rect.left = objeto.right
+                    print(f"parte izquierda del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
+                    print("choqué a la izquiera")
+

@@ -1,8 +1,8 @@
 import pygame as pg
 import random
-from auxiliar import Auxiliar
+from auxiliar.auxiliar import Auxiliar
 import random as rd
-from constantes import (ANCHO_VENTANA,ALTO_VENTANA)
+from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 
 class Frutas(pg.sprite.Sprite):
     def __init__(self) -> None:
@@ -10,13 +10,11 @@ class Frutas(pg.sprite.Sprite):
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/Apple.png",17,1,step=1)
         self.puntos = random.randrange(10,50)
         self.frame = 0
-        # self.ubicacion_en_x = x
-        # self.ubicacion_en_y = y
         self.animation = self.stay
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
         self.rect.x = rd.randint(0,ANCHO_VENTANA - self.rect.width)
-        self.rect.y = rd.randint(0,ALTO_VENTANA - self.rect.height)
+        self.rect.y = rd.randint(0,ALTO_VENTANA / 2 - self.rect.height)
         self.grupo_frutas = pg.sprite.Group()
 
     def update(self):

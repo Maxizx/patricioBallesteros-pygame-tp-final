@@ -1,5 +1,5 @@
 import pygame as pg
-from constantes import cargar_settings
+from auxiliar.constantes import cargar_settings
 
 configuraciones = cargar_settings("config/settings.json").get("configuraciones_generales")
 path_musica = configuraciones.get("FOLDER_MUSIC")

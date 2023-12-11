@@ -1,6 +1,6 @@
 import pygame as pg
-from auxiliar import Auxiliar
-from constantes import *
+from auxiliar.auxiliar import Auxiliar
+from auxiliar.constantes import *
 
 
 
@@ -126,7 +126,6 @@ class Player(pg.sprite.Sprite):
         camara_x -=  valor
         return camara_x
 
-
     # def colision_con_objetos(self,objeto):
     #     if pg.sprite.spritecollide(self.rect,):
     #     # if self.rect.colliderect(objeto):
@@ -143,10 +142,6 @@ class Player(pg.sprite.Sprite):
     #         elif self.rect[0] <= objeto.right:
     #             self.rect.left = objeto.right
     #             # print("choqué a la izquiera")
-
-
-
-
 
     def draw(self, screen):
         self.image = self.animation[self.frame]
