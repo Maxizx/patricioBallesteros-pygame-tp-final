@@ -28,7 +28,7 @@ from auxiliar.objetos.player import Player
 
 
 class GameManager(pg.sprite.Sprite):
-    def __init__(self, nivel=0):
+    def __init__(self, nivel=0,escenario=0):
         pg.font.init()
         pg.init()
         pg.display.set_caption("Island Adventure")
@@ -40,35 +40,39 @@ class GameManager(pg.sprite.Sprite):
         self.debug = False
         self.win = False
         self.win_level = False
-        self.musica_de_fondo = audio("musica_de_fondo",repetir=-1)
+        self.musica_de_fondo = audio("musica_de_fondo",volumen= 0.015625,repetir=-1)
+        self.recompensa = audio("apple",volumen=100)
         self.fuente = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",30)
         self.fuente_1 = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",29)   
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
         self.player_1 = Player(config_player)
-        # self.enemigo_1= Enemy(0, 0, 4, 8, 8, 16)
-        # self.fruta_1 = Frutas(200,300)
         self.fruta = Frutas()
-        self.enemigo = Enemy(0,0)
+        self.enemigo = Enemy(100,100)
         self.lista_de_niveles = lista_niveles
         self.nivel = nivel
-        self.escenario =  0
+        self.escenario =  escenario
+        self.escenario_actual = self.escenario 
+        self.change = False
         self.mapas = construir_mapas(0,0)
-        self.fruta.spawn_frutas()
+        self.fruta.spawn_frutas(10)
         self.enemigo.spawn_enemigos()
         self.cargar_mapa()
 
-
+        # self.apple = pg.mixer.Sound("audio/apple.mp3") 
 
 
     def run(self):
         """
         Ejecuta el bucle principal del juego.
         """
+        
         while True:
             relog = pg.time.get_ticks()//1000
             self.musica_de_fondo.reproducir_audio()
+            # self.recompensa.reproducir_audio()
+            self.pasar_escenario()
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -95,6 +99,13 @@ class GameManager(pg.sprite.Sprite):
                 self.enemigo.caminar_direccion(True)
                 
 
+
+            self.enemigo.spawn_enemigos()
+
+
+
+
+
             # camara_x = -self.player_1.rect[0] % self.imagen_fondo2.get_rect().width
             camara_x = -self.player_1.rect[0] % ANCHO_VENTANA
             #print(self.player_1.rect)
@@ -106,6 +117,8 @@ class GameManager(pg.sprite.Sprite):
                 
 
                 self.gameover()
+
+            
 
             self.colision_con_objetos_enemigo(self.enemigo.grupo_enemigos)
             self.colision_con_objetos(self.player_1)
@@ -128,14 +141,19 @@ class GameManager(pg.sprite.Sprite):
             contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
             contador_score_jugador = self.fuente_1.render(f"Score: {str(self.player_1.score)}",False,(255,255,255),(0,0,0) )
-            nivel = self.fuente.render(f"NIVEL: {str(self.nivel + 1)}",False,(255,255,255),(0,0,0) )
+            nivel = self.fuente.render(f"NIVEL: {str(self.nivel + 1)} ESCENARIO: {str(self.escenario + 1)}",False,(255,255,255),(0,0,0) )
             self.screen.blit(self.vidas,(80,13))
             self.screen.blit(contador_vidas,(100,30))
             self.screen.blit(contador,(150,30))
             self.screen.blit(contador_score_jugador,(ANCHO_VENTANA-300,30))
             self.screen.blit(nivel,(ANCHO_VENTANA/2,30))
+            if self.change == False:
+                self.screen.fill("Black")
+                self.change = True
+        
 
             if self.debug == True:
+                print(f" Player X top: {self.player_1.rect.top},left: {self.player_1.rect.left}, right: {self.player_1.rect.right},bottom: {self.player_1.rect.bottom}")
                 self.dibujar_bloque()
                 self.dibujar_player()
                 self.dibujar_frutas()
@@ -145,8 +163,16 @@ class GameManager(pg.sprite.Sprite):
             # player dibujarlo
             # dibujar todo el nivel
 
-
             pg.display.flip()
+
+
+
+
+
+
+
+
+
 
     def losser(self):
         if self.player_1.lives == 0:
@@ -176,13 +202,33 @@ class GameManager(pg.sprite.Sprite):
 
     def cargar_mapa(self):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
-        self.muros = self.mapas.construir_mapa(self.mapa)
+        self.mapas.construir_mapa(self.mapa)
 
     def pasar_escenario(self):
-        self.escenario += 1
-        self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
+        if self.player_1.rect.right > self.screen_width:
+            if self.escenario < 2:
+                self.escenario += 1
+                game = GameManager(escenario=self.escenario)
+                game.run()
+        elif self.player_1.score > 400:
+            if self.nivel < 2:
+                self.nivel += 1
+                self.escenario =0
+                game = GameManager(self.nivel)
+                game.run()
+
+
+        # if self.change == False:
+        #     self.cargar_mapa()
+        #     self.change = True
+        # elif self.player_1.rect.right > self.screen_width:
+        #         self.escenario_actual += 1
+        #         self.escenario = self.escenario_actual
+        #         print(self.escenario)
+        #         self.cargar_mapa()
+                
         
-    # def colision_con_objetos(self,objeto):
+    #def colision_con_objetos(self,objeto):
     #     bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
     #     if bloque_colisiona:
     #     # if self.rect.colliderect(objeto):
@@ -221,17 +267,44 @@ class GameManager(pg.sprite.Sprite):
 
     def colision_con_fruta(self,objeto):
         if pg.sprite.spritecollide(objeto,group = self.fruta.grupo_frutas,dokill = True):
-        # if self.rect.colliderect(objeto):
             print("frutaaa")
             self.player_1.score += self.fruta.puntos
             print(self.player_1.score)
+            self.recompensa.get_volumen_del_audio() 
+            self.recompensa.reproducir_audio()
 
     def colision_con_enemigo(self,objeto):
         if pg.sprite.spritecollide(objeto,self.enemigo.grupo_enemigos,dokill=False):
-            # if self.rect.colliderect(objeto):
                 if (pg.time.get_ticks() - self.enemigo.tiempo_entre_hits) > self.enemigo.cooldown_de_hit:
                     self.player_1.lives -=1
                     self.enemigo.tiempo_entre_hits = pg.time.get_ticks()
+
+    def colision_con_objetos(self,player):
+
+        for objeto in self.mapas.grupo_bloques:
+
+            if player.rect.colliderect(objeto):
+                objeto = objeto.rect
+                if player.rect.bottom > objeto.top and player.rect.top < objeto.top:
+                    # print("choqué abajo")
+                    player.rect.bottom = objeto.top
+
+                elif player.rect.top < objeto.bottom and player.rect.bottom > objeto.bottom:
+                    player.rect.top = objeto.bottom
+                    print("choqué arriba")
+
+                elif player.rect.right > objeto.left and player.rect.left > objeto.left:
+                    player.rect.bottom = objeto.top
+                    player.rect.right = objeto.left
+                    print(f"parte derecha del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
+                    print("choqué a la derecha")
+
+                elif player.rect.left < objeto.right and player.rect.right > objeto.right:
+                    player.rect.bottom = objeto.top
+                    player.rect.left = objeto.right
+                    print(f"parte izquierda del personaje: {player.rect.left}, parte derecha del bloque: {objeto.right}")
+                    print("choqué a la izquiera")
+
 
 
     def dibujar_bloque(self):
@@ -250,29 +323,13 @@ class GameManager(pg.sprite.Sprite):
             pg.draw.rect(self.screen,"Green",self.player_1.rect,2)
 
 
-    def colision_con_objetos(self,player):
 
-        for objeto in self.mapas.grupo_bloques:
 
-            if player.rect.colliderect(objeto):
-                objeto = objeto.rect
-                if player.rect.bottom > objeto.top and player.rect.top < objeto.top:
-                    # print("choqué abajo")
-                    player.rect.bottom = objeto.top
+# enemigo: balas, vida
+# Trampa: 
+# generador de enemigos:
 
-                elif player.rect.top < objeto.bottom and player.rect.bottom > objeto.bottom:
-                    player.rect.top = objeto.bottom
-                    print("choqué arriba")
-
-                elif player.rect.right >= objeto.left and player.rect.left < objeto.left:
-                    player.rect.bottom = objeto.top
-                    player.rect.right = objeto.left
-                    print(f"parte derecha del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
-                    print("choqué a la derecha")
-
-                elif player.rect.left < objeto.right and player.rect.right > objeto.right:
-                    player.rect.bottom = objeto.top
-                    player.rect.left = objeto.right
-                    print(f"parte izquierda del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
-                    print("choqué a la izquiera")
+# sttings
+# pausa
+# pantalla de ranking con json
 

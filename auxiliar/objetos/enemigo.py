@@ -27,8 +27,9 @@ class Enemy(pg.sprite.Sprite):
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits = pg.time.get_ticks()
         self.move_x += self.speed_walk
+        self.tiempo_spawn= 6000
+        self.relog_spawn = pg.time.get_ticks()
 
-        self.is_jump = False
 
 
     def caminar_direccion(self, izquierda = True):
@@ -44,11 +45,6 @@ class Enemy(pg.sprite.Sprite):
             self.frame += 1
         else:
             self.frame = 0
-            if self.is_jump == True:
-                self.is_jump = False
-                self.move_y = 0
-                self.direccion = "down"
-        
 
         if self.rect[0] < 0:
             self.rect[0] = 0
@@ -90,9 +86,11 @@ class Enemy(pg.sprite.Sprite):
     #             self.caminar_direccion(False)
 
     def spawn_enemigos(self,cantidad_de_enemigos = 4):
-        for _ in range(cantidad_de_enemigos):
-            enemigo = Enemy(0,0)
-            self.grupo_enemigos.add(enemigo)
-            # print(f"x: {fruta.rect.x} y :{fruta.rect.y}")
-            print("Se creó un enemigo nueva")
-
+        if (pg.time.get_ticks() - self.relog_spawn) > self.tiempo_spawn:
+            for _ in range(cantidad_de_enemigos):
+                    enemigo = Enemy(0,0)
+                    self.grupo_enemigos.add(enemigo)
+                    print("Se creó un enemigo nueva")
+            self.relog_spawn = pg.time.get_ticks()
+    
+        

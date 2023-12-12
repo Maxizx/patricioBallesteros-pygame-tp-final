@@ -16,6 +16,11 @@
                 "gravity": 8,
                 "jump": 14
             },
+            "level_config":{
+                "level":0,
+                "cantidad_De_frutas": 10,
+                "Cantidad_enemigos":6
+            },
             
             "0_escenario": [
                 "                         ",
