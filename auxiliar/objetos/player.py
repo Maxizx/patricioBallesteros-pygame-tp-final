@@ -1,11 +1,11 @@
 import pygame as pg
 from auxiliar.auxiliar import Auxiliar
 from auxiliar.constantes import *
-
+from auxiliar.objetos.balas import balas
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, diccionario) -> None:
+    def __init__(self, diccionario,score) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Idle (32x32).png", 11, 1)
@@ -13,7 +13,7 @@ class Player(pg.sprite.Sprite):
         # self.jump_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, True, 2)
         self.frame = 0
         self.lives = 5
-        self.score = 0
+        self.score = score
         self.move_x = diccionario["x"]
         self.move_y = diccionario["y"]
         self.speed_walk = diccionario["speed_walk"]
@@ -26,8 +26,11 @@ class Player(pg.sprite.Sprite):
         self.direccion = "right"
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits = pg.time.get_ticks()
-
+        self.grupo_de_balas = pg.sprite.Group()
+        self.lado = False
         self.is_jump = False
+        self.cooldown_disparo = 150         
+        self.tiempo_entre_disparos = pg.time.get_ticks()
 
 
     def selector_de_movimiento(self,movimientos):
@@ -40,6 +43,8 @@ class Player(pg.sprite.Sprite):
             self.control("JUMP_R")
         if movimientos[pg.K_SPACE] and movimientos[pg.K_LEFT]:
             self.control("JUMP_L")
+        if movimientos[pg.K_a]:
+            self.control("ATTACK")
         if not movimientos[pg.K_RIGHT] and not movimientos[pg.K_LEFT]:
             self.control("STAY")
 
@@ -47,11 +52,18 @@ class Player(pg.sprite.Sprite):
 
 
     def control(self, action):
+        if action == "ATTACK":
+            if (pg.time.get_ticks() - self.tiempo_entre_disparos) > self.cooldown_disparo:
+                self.tiempo_entre_disparos = pg.time.get_ticks()
+                bala = balas("images/huevo.png",self.rect.x,self.rect.y,self.speed_run,self.lado)
+                self.grupo_de_balas.add(bala)
+
         if action == "WALK_R":
             self.move_x = self.speed_walk
             self.animation = self.walk_r
             self.frame = 0
             self.direccion = "right"
+            self.lado = True
 
 
         elif action == "WALK_L":
@@ -59,6 +71,7 @@ class Player(pg.sprite.Sprite):
             self.animation = self.walk_l
             self.frame = 0
             self.direccion = "left"
+            self.lado = False
 
         elif action == "JUMP_R":
             self.move_y = -self.jump
@@ -143,7 +156,10 @@ class Player(pg.sprite.Sprite):
     #             self.rect.left = objeto.right
     #             # print("choqué a la izquiera")
 
-    def draw(self, screen):
+    def draw(self, screen,grupo1 , grupo2):
+        for bala in self.grupo_de_balas:
+            bala.draw(screen,grupo1,grupo2)
+
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
 

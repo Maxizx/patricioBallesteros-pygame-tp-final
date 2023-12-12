@@ -29,9 +29,9 @@
                 "       XX                ",
                 "                         ",
                 "                         ",
-                "       X         XXXXXXXX",
-                "       X                 ",
-                "XXXXXXXXXXX  XXXXXXXXXXXXX"
+                "                 XXXXXXXX",
+                "                         ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "1_escenario": [
                 "                         ",
@@ -42,7 +42,7 @@
                 "                         ",
                 "                         ",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "2_escenario": [
                 "                         ",
@@ -53,7 +53,7 @@
                 "                         ",
                 "        XXX     X        ",
                 "                X        ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ]
         },
         "level_1": {
@@ -74,7 +74,7 @@
                 "            XXXX         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "1_escenario": [
                 "                         ",
@@ -85,7 +85,7 @@
                 "                         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "2_escenario": [
                 "                         ",
@@ -96,7 +96,8 @@
                 "            XXXX         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
             ]
         },
         "level_2": {
@@ -117,7 +118,8 @@
                 "            XXXX         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
             ],
             "1_escenario": [
                 "                         ",
@@ -128,7 +130,8 @@
                 "            XXXX         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
             ],
             "2_escenario": [
                 "                         ",
@@ -139,7 +142,8 @@
                 "            XXXX         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
             ]
         }
     }

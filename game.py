@@ -28,7 +28,7 @@ from auxiliar.objetos.player import Player
 
 
 class GameManager(pg.sprite.Sprite):
-    def __init__(self, nivel=0,escenario=0):
+    def __init__(self, nivel=0,escenario=0,score=0):
         pg.font.init()
         pg.init()
         pg.display.set_caption("Island Adventure")
@@ -47,17 +47,19 @@ class GameManager(pg.sprite.Sprite):
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
-        self.player_1 = Player(config_player)
+        self.player_1 = Player(config_player,score)
         self.fruta = Frutas()
-        self.enemigo = Enemy(100,100)
+        self.enemigo = Enemy()
+        self.menu_ = menu()
         self.lista_de_niveles = lista_niveles
         self.nivel = nivel
         self.escenario =  escenario
         self.escenario_actual = self.escenario 
         self.change = False
+        self.relog = 0
         self.mapas = construir_mapas(0,0)
         self.fruta.spawn_frutas(10)
-        self.enemigo.spawn_enemigos()
+        # self.enemigo.spawn_enemigos()
         self.cargar_mapa()
 
         # self.apple = pg.mixer.Sound("audio/apple.mp3") 
@@ -69,7 +71,7 @@ class GameManager(pg.sprite.Sprite):
         """
         
         while True:
-            relog = pg.time.get_ticks()//1000
+            self.relog = pg.time.get_ticks()//1000
             self.musica_de_fondo.reproducir_audio()
             # self.recompensa.reproducir_audio()
             self.pasar_escenario()
@@ -100,23 +102,15 @@ class GameManager(pg.sprite.Sprite):
                 
 
 
-            self.enemigo.spawn_enemigos()
 
 
 
-
-
-            # camara_x = -self.player_1.rect[0] % self.imagen_fondo2.get_rect().width
-            camara_x = -self.player_1.rect[0] % ANCHO_VENTANA
-            #print(self.player_1.rect)
             
-            #camara_x = -self.player_1.move_x
-            self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(self.player_1.movimiento_horizontal_de_la_camara(self.imagen_fondo2.get_rect().width),0)))
-            if camara_x < ANCHO_VENTANA:
-                self.screen.blit(self.imagen_fondo2,(camara_x,0))
-                
 
-                self.gameover()
+            self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(0,0)))
+
+
+            self.gameover()
 
             
 
@@ -125,20 +119,21 @@ class GameManager(pg.sprite.Sprite):
             self.colision_con_objetos(self.enemigo)
             self.colision_con_fruta(self.player_1)
             self.colision_con_enemigo(self.player_1)
-            # self.losser()
+            self.colision_fruta_con_bloque(self.fruta.grupo_frutas)
+
 
 
             self.enemigo.grupo_enemigos.update()
             self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
-            self.player_1.draw(self.screen)
+            self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos)
             self.fruta.grupo_frutas.draw(self.screen)
             self.fruta.grupo_frutas.update()
             self.mapas.grupo_bloques.draw(self.screen)
             self.mapas.grupo_bloques.update()
 
 
-            contador = self.fuente_1.render(f"Time {str(relog)}",True,(255,255,255),(0,0,0))
+            contador = self.fuente_1.render(f"Time {str(self.relog)}",True,(255,255,255),(0,0,0))
             contador_vidas = self.fuente_1.render(str(self.player_1.lives),False,(0,0,0))
             contador_score_jugador = self.fuente_1.render(f"Score: {str(self.player_1.score)}",False,(255,255,255),(0,0,0) )
             nivel = self.fuente.render(f"NIVEL: {str(self.nivel + 1)} ESCENARIO: {str(self.escenario + 1)}",False,(255,255,255),(0,0,0) )
@@ -150,7 +145,6 @@ class GameManager(pg.sprite.Sprite):
             if self.change == False:
                 self.screen.fill("Black")
                 self.change = True
-        
 
             if self.debug == True:
                 print(f" Player X top: {self.player_1.rect.top},left: {self.player_1.rect.left}, right: {self.player_1.rect.right},bottom: {self.player_1.rect.bottom}")
@@ -158,6 +152,8 @@ class GameManager(pg.sprite.Sprite):
                 self.dibujar_player()
                 self.dibujar_frutas()
                 self.dibujar_enemigos()
+                self.dibujar_balas()
+            self.enemigo.spawn_enemigos(self.screen)
 
             # enemigos update
             # player dibujarlo
@@ -168,21 +164,10 @@ class GameManager(pg.sprite.Sprite):
 
 
 
-
-
-
-
-
-
-    def losser(self):
-        if self.player_1.lives == 0:
-            self.loser = True
-
-
     def gameover(self):
         if self.player_1.lives == 0:
-            menu_ = menu()
-            menu_.game_over()
+            
+            self.menu_.game_over()
             print("Game Over")
             
             # pg.quit()
@@ -205,17 +190,23 @@ class GameManager(pg.sprite.Sprite):
         self.mapas.construir_mapa(self.mapa)
 
     def pasar_escenario(self):
-        if self.player_1.rect.right > self.screen_width:
-            if self.escenario < 2:
-                self.escenario += 1
-                game = GameManager(escenario=self.escenario)
-                game.run()
-        elif self.player_1.score > 400:
+        if self.escenario == 2 and self.player_1.score >= 400  and self.nivel != 2:
             if self.nivel < 2:
                 self.nivel += 1
                 self.escenario =0
-                game = GameManager(self.nivel)
+                game = GameManager(self.nivel,score=self.player_1.score)
                 game.run()
+                
+        elif self.player_1.rect.right > self.screen_width:
+            if self.escenario < 2:
+                self.escenario += 1
+                game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score)
+                game.run()
+            if self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
+                self.menu_.win_game()
+                
+
+
 
 
         # if self.change == False:
@@ -248,6 +239,14 @@ class GameManager(pg.sprite.Sprite):
     #             objeto.rect.bottom = bloque_colisiona.rect.top
     #             objeto.rect.left = bloque_colisiona.rect.right
     #             # print("choqué a la izquiera")
+
+    def colision_fruta_con_bloque(self,grupo_frutas):
+        for objeto in grupo_frutas:
+            bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
+            if bloque_colisiona:
+            # if self.rect.colliderect(objeto):
+                objeto.rect.bottom = bloque_colisiona.rect.top
+
 
     def colision_con_objetos_enemigo(self,grupo_de_sprites):
         for objeto in grupo_de_sprites:
@@ -291,9 +290,9 @@ class GameManager(pg.sprite.Sprite):
 
                 elif player.rect.top < objeto.bottom and player.rect.bottom > objeto.bottom:
                     player.rect.top = objeto.bottom
-                    print("choqué arriba")
+                    # print("choqué arriba")
 
-                elif player.rect.right > objeto.left and player.rect.left > objeto.left:
+                elif player.rect.right > objeto.left and player.rect.left < objeto.left:
                     player.rect.bottom = objeto.top
                     player.rect.right = objeto.left
                     print(f"parte derecha del personaje: {player.rect.right}, parte izquiera del bloque: {objeto.left}")
@@ -319,17 +318,15 @@ class GameManager(pg.sprite.Sprite):
         for bloque in self.enemigo.grupo_enemigos:
             pg.draw.rect(self.screen,"Red",bloque.rect,2)
 
+    
+    def dibujar_balas(self):
+        for bloque in self.player_1.grupo_de_balas:
+            pg.draw.rect(self.screen,"White",bloque.rect,2)
+
+
     def dibujar_player(self):
             pg.draw.rect(self.screen,"Green",self.player_1.rect,2)
 
 
 
-
-# enemigo: balas, vida
-# Trampa: 
-# generador de enemigos:
-
-# sttings
-# pausa
-# pantalla de ranking con json
-
+# 

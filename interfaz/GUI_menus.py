@@ -53,6 +53,32 @@ class menu():
 
             pg.display.update()
 
+    def win_game(self):
+        while True:
+            self.posicion_del_mouse = pg.mouse.get_pos()
+
+            self.screen.fill("black")
+            self.PLAY_TEXT = self.get_font(70).render("Win", True, "Green")
+            self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= self.posicion_centrada)
+            self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
+
+            self.PLAY_BACK = Button(image=None, pos= self.posicion_centrada_abajo, 
+                                text_input="SALIR", font=self.get_font(75), base_color="White", hovering_color="Green")
+
+            self.PLAY_BACK.changeColor(self.posicion_del_mouse)
+            self.PLAY_BACK.update(self.screen)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                    
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
+                        pg.quit()
+                        sys.exit()
+
+            pg.display.update()
+
     def pause(self):
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()

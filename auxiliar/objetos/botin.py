@@ -8,7 +8,7 @@ class Frutas(pg.sprite.Sprite):
     def __init__(self) -> None:
         super().__init__()
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/Apple.png",17,1,step=1)
-        self.puntos = random.randrange(10,50)
+        self.puntos = random.randrange(15,30)
         self.frame = 0
         self.animation = self.stay
         self.image = self.animation[self.frame]

@@ -3,7 +3,7 @@ import pygame as pg
 
 class Auxiliar:
     @staticmethod
-    def getSurfaceFromSpriteSheet(path, columnas, filas, flip=False, step=1):
+    def getSurfaceFromSpriteSheet(path, columnas, filas, flip=False, step=1, rescalar=None):
         lista = []
         surface_imagen = pg.image.load(path)
         fotograma_ancho = int(surface_imagen.get_width() / columnas)
@@ -20,6 +20,9 @@ class Auxiliar:
                     surface_fotograma = pg.transform.flip(
                         surface_fotograma, True, False
                     )
+                if rescalar != None:
+                    surface_fotograma = pg.transform.scale_by(surface_fotograma,rescalar)
+
                 lista.append(surface_fotograma)
         return lista
 
