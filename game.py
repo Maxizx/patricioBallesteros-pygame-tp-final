@@ -4,7 +4,7 @@ from auxiliar.objetos.player import Player
 from auxiliar.objetos.enemigo import Enemy
 from auxiliar.musica import audio
 from auxiliar.constantes import *
-from niveles.plataforma import (construir_mapas)
+from niveles.plataforma import (sierra,construir_mapas)
 from auxiliar.auxiliar import Auxiliar
 from interfaz.GUI_menus import menu
 
@@ -36,12 +36,12 @@ class GameManager(pg.sprite.Sprite):
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pg.time.Clock()
-        self.frame_rate = FPS
+        self.frame_rate = 60
         self.debug = False
         self.win = False
         self.win_level = False
         self.musica_de_fondo = audio("musica_de_fondo",volumen= 0.015625,repetir=-1)
-        self.recompensa = audio("apple",volumen=100)
+        self.recompensa = audio("apple", volumen = 1)
         self.fuente = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",30)
         self.fuente_1 = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",29)   
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
@@ -51,15 +51,15 @@ class GameManager(pg.sprite.Sprite):
         self.fruta = Frutas()
         self.enemigo = Enemy()
         self.menu_ = menu()
+        self.trampa = sierra()
         self.lista_de_niveles = lista_niveles
         self.nivel = nivel
         self.escenario =  escenario
         self.escenario_actual = self.escenario 
         self.change = False
-        self.relog = 0
-        self.mapas = construir_mapas(0,0)
-        self.fruta.spawn_frutas(10)
-        # self.enemigo.spawn_enemigos()
+        # self.relog = pg.time.get_ticks()
+        self.mapas = construir_mapas()
+        self.fruta.spawn_frutas(8)
         self.cargar_mapa()
 
         # self.apple = pg.mixer.Sound("audio/apple.mp3") 
@@ -71,10 +71,11 @@ class GameManager(pg.sprite.Sprite):
         """
         
         while True:
+            self.clock.tick(self.frame_rate)
             self.relog = pg.time.get_ticks()//1000
             self.musica_de_fondo.reproducir_audio()
             # self.recompensa.reproducir_audio()
-            self.pasar_escenario()
+            self.cambio_de_escenario()
             
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -84,35 +85,36 @@ class GameManager(pg.sprite.Sprite):
                 lista_teclas_presionadas = pg.key.get_pressed()
                 if lista_teclas_presionadas[pg.K_i]:
                     # main_menu()
-                    print("sin vidas")
+                    
+                    self.menu_.pause()
+
+                    # self.relog -= tiempo_en_pausa
+                    # print(tiempo_en_pausa)
+
+
+                    # self.menu_.pause()
+
                 if lista_teclas_presionadas[pg.K_p]:
                         self.debug = True
                 if lista_teclas_presionadas[pg.K_o]:
                         self.debug = False
+                
 
                 if lista_teclas_presionadas[pg.K_UP]:
                     self.musica_de_fondo.control_volumen(True)
+                    self.recompensa.control_volumen(True)
                     print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
                 if lista_teclas_presionadas[pg.K_DOWN]:
                     self.musica_de_fondo.control_volumen(False)
+                    self.recompensa.control_volumen(False)
                     print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
                 
                 self.player_1.selector_de_movimiento(lista_teclas_presionadas)
                 self.enemigo.caminar_direccion(True)
-                
-
-
-
-
-
             
-
             self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(0,0)))
 
-
             self.gameover()
-
-            
 
             self.colision_con_objetos_enemigo(self.enemigo.grupo_enemigos)
             self.colision_con_objetos(self.player_1)
@@ -120,17 +122,24 @@ class GameManager(pg.sprite.Sprite):
             self.colision_con_fruta(self.player_1)
             self.colision_con_enemigo(self.player_1)
             self.colision_fruta_con_bloque(self.fruta.grupo_frutas)
-
+            self.colision_con_trampa(self.player_1)
 
 
             self.enemigo.grupo_enemigos.update()
-            self.enemigo.grupo_enemigos.draw(self.screen)
             self.player_1.update()
             self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos)
-            self.fruta.grupo_frutas.draw(self.screen)
-            self.fruta.grupo_frutas.update()
             self.mapas.grupo_bloques.draw(self.screen)
             self.mapas.grupo_bloques.update()
+
+
+            for enemy in self.enemigo.grupo_enemigos:
+                enemy.update_animacion(self.screen)
+
+            for fruit in self.fruta.grupo_frutas:
+                fruit.update_animacion(self.screen)
+
+            for tramp in self.mapas.grupo_sierras:
+                tramp.update_animacion(self.screen)
 
 
             contador = self.fuente_1.render(f"Time {str(self.relog)}",True,(255,255,255),(0,0,0))
@@ -142,9 +151,6 @@ class GameManager(pg.sprite.Sprite):
             self.screen.blit(contador,(150,30))
             self.screen.blit(contador_score_jugador,(ANCHO_VENTANA-300,30))
             self.screen.blit(nivel,(ANCHO_VENTANA/2,30))
-            if self.change == False:
-                self.screen.fill("Black")
-                self.change = True
 
             if self.debug == True:
                 print(f" Player X top: {self.player_1.rect.top},left: {self.player_1.rect.left}, right: {self.player_1.rect.right},bottom: {self.player_1.rect.bottom}")
@@ -153,35 +159,32 @@ class GameManager(pg.sprite.Sprite):
                 self.dibujar_frutas()
                 self.dibujar_enemigos()
                 self.dibujar_balas()
+                self.dibujar_sierra()
             self.enemigo.spawn_enemigos(self.screen)
-
-            # enemigos update
-            # player dibujarlo
-            # dibujar todo el nivel
 
             pg.display.flip()
 
-
+    def get_font(self,size): # Returns Press-Start-2P in the desired size
+        return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
 
 
     def gameover(self):
         if self.player_1.lives == 0:
-            
             self.menu_.game_over()
             print("Game Over")
             
-            # pg.quit()
-            # sys.exit()
 
     def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
         for numero_de_nivel in range(len(lista_de_niveles)):
             if numero_de_nivel == nivel_elegido:
                 nivel = f"level_{numero_de_nivel}"
                 level = lista_de_niveles.get(nivel)
+                self.relog = pg.time.get_ticks()
+
 
                 for escenario in range(len(nivel)- 1):
                     if escenario == escenario_elegido:
-                        # print(f"nivel : {nivel}, escenario: {escenario}")
+                        print(f"nivel : {nivel}, escenario: {escenario}")
                         escenario_a_cargar = level.get(f"{escenario}_escenario")
                         return escenario_a_cargar
 
@@ -189,7 +192,7 @@ class GameManager(pg.sprite.Sprite):
         self.mapa = self.eleccion_nivel(self.lista_de_niveles,self.nivel,self.escenario)
         self.mapas.construir_mapa(self.mapa)
 
-    def pasar_escenario(self):
+    def cambio_de_escenario(self):
         if self.escenario == 2 and self.player_1.score >= 400  and self.nivel != 2:
             if self.nivel < 2:
                 self.nivel += 1
@@ -240,13 +243,13 @@ class GameManager(pg.sprite.Sprite):
     #             objeto.rect.left = bloque_colisiona.rect.right
     #             # print("choqué a la izquiera")
 
+
     def colision_fruta_con_bloque(self,grupo_frutas):
         for objeto in grupo_frutas:
             bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
             if bloque_colisiona:
             # if self.rect.colliderect(objeto):
                 objeto.rect.bottom = bloque_colisiona.rect.top
-
 
     def colision_con_objetos_enemigo(self,grupo_de_sprites):
         for objeto in grupo_de_sprites:
@@ -269,7 +272,7 @@ class GameManager(pg.sprite.Sprite):
             print("frutaaa")
             self.player_1.score += self.fruta.puntos
             print(self.player_1.score)
-            self.recompensa.get_volumen_del_audio() 
+            print(self.recompensa.get_volumen_del_audio()) 
             self.recompensa.reproducir_audio()
 
     def colision_con_enemigo(self,objeto):
@@ -277,6 +280,13 @@ class GameManager(pg.sprite.Sprite):
                 if (pg.time.get_ticks() - self.enemigo.tiempo_entre_hits) > self.enemigo.cooldown_de_hit:
                     self.player_1.lives -=1
                     self.enemigo.tiempo_entre_hits = pg.time.get_ticks()
+
+    def colision_con_trampa(self,objeto):
+        for tramp in self.mapas.grupo_sierras:
+            if objeto.rect.colliderect(tramp.rect):
+                    if (pg.time.get_ticks() - self.trampa.tiempo_entre_hits) > self.trampa.cooldown_de_hit:
+                        self.player_1.lives -=1
+                        self.trampa.tiempo_entre_hits = pg.time.get_ticks()
 
     def colision_con_objetos(self,player):
 
@@ -306,6 +316,10 @@ class GameManager(pg.sprite.Sprite):
 
 
 
+    def dibujar_sierra(self):
+        for bloque in self.mapas.grupo_sierras:
+            pg.draw.rect(self.screen,"Red",bloque.rect,2)
+
     def dibujar_bloque(self):
         for bloque in self.mapas.grupo_bloques:
             pg.draw.rect(self.screen,"Black",bloque.rect,2)
@@ -318,11 +332,9 @@ class GameManager(pg.sprite.Sprite):
         for bloque in self.enemigo.grupo_enemigos:
             pg.draw.rect(self.screen,"Red",bloque.rect,2)
 
-    
     def dibujar_balas(self):
         for bloque in self.player_1.grupo_de_balas:
             pg.draw.rect(self.screen,"White",bloque.rect,2)
-
 
     def dibujar_player(self):
             pg.draw.rect(self.screen,"Green",self.player_1.rect,2)

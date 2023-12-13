@@ -8,9 +8,8 @@ import random as rd
 class Enemy(pg.sprite.Sprite):
     def __init__(self, x=0, y=0) -> None:
         super().__init__()
-        self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/Chicken/Run (32x34).png", 14, 1)[:14]
-        self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/Chicken/Run (32x34).png", 14, 1, True)[:14]
-        self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/Chicken/Idle (32x34).png", 13, 1)
+        self.image_R = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/Chicken/Run (32x34).png", 14, 1,True)[:14]
+        self.image_L = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/Chicken/Run (32x34).png", 14, 1,False)[:14]
         self.image_spawner = Auxiliar.load_image_and_scale("images/caracters/stink/Fall (32x32).png",100,110)
         self.live = 100
         self.frame = 0
@@ -20,10 +19,10 @@ class Enemy(pg.sprite.Sprite):
         self.speed_run = rd.randint(2,5)
         self.gravity = 8
         self.move_x += self.speed_walk
-        self.animation = self.stay
+        self.animation = self.image_R
         self.image = self.animation[self.frame]
         self.rect = self.image.get_rect()
-        self.direccion = "right"
+        self.mira_a_la_derecha = True
         self.grupo_enemigos = pg.sprite.Group()
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits =pg.time.get_ticks()
@@ -34,10 +33,8 @@ class Enemy(pg.sprite.Sprite):
 
     def caminar_direccion(self, izquierda = True):
         if izquierda == True:
-            # Enemy.control("WALK_L")
             self.move_x = -self.speed_walk
         else:
-            # Enemy.control("WALK_R")
             self.move_x = self.speed_walk
 
     def update(self):
@@ -49,10 +46,14 @@ class Enemy(pg.sprite.Sprite):
         if self.rect[0] < 0:
             self.rect[0] = 0
             self.move_x = self.move_x*-1
+            self.mira_a_la_derecha = True
+
 
         elif self.rect[0] > ANCHO_VENTANA:
             self.rect[0] = ANCHO_VENTANA
             self.move_x = self.move_x * -1
+            self.mira_a_la_derecha = False
+
 
 
         self.rect.x += self.move_x
@@ -61,10 +62,6 @@ class Enemy(pg.sprite.Sprite):
         if self.rect.y < ALTO_VENTANA:
             self.rect.y += self.gravity
 
-    def movimiento_horizontal_de_la_camara(self, valor):
-        camara_x = -self.rect[0] % ANCHO_VENTANA
-        camara_x -=  valor
-        return camara_x
 
     # def colision_con_enemigo(self,objeto):
     #     if pg.sprite.spritecollide(objeto,self.grupo_enemigos,dokill=False):
@@ -98,4 +95,19 @@ class Enemy(pg.sprite.Sprite):
                     print("Se creó un enemigo nueva")
             self.relog_spawn = pg.time.get_ticks()
     
-        
+
+    def update_animacion(self,screen):
+        if self.mira_a_la_derecha == True:
+            self.animation = self.image_R
+        elif self.mira_a_la_derecha == False:
+            self.animation = self.image_L
+
+        if self.frame < len(self.animation) - 1:
+            self.frame += 1
+        else:
+            self.frame = 0
+
+        self.image = self.animation[self.frame]
+        screen.blit(self.image, self.rect)
+
+

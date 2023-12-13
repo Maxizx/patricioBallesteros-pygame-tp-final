@@ -1,8 +1,9 @@
 import pygame as pg
 from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
-from interfaz.botones import Button as Button
+from interfaz.settings.botones import Button as Button
 from auxiliar.auxiliar import Auxiliar
 import sys
+
 
 # if __name__ == "__main__":
 class menu():
@@ -80,24 +81,23 @@ class menu():
             pg.display.update()
 
     def pause(self):
-        while True:
+        pausa = True
+
+        while pausa:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.fill("black")
 
-            self.boton_subir = pg.image.load("images/UI/PNG/grey_arrowUpWhite.png")
-            self.boton_subir_rect = self.boton_subir.get_rect(center= ((self.x_centrada)-50,300))
-            self.boton_bajar = pg.image.load("images/UI/PNG/grey_arrowDownWhite.png")
-            self.boton_bajar_rect = self.boton_bajar.get_rect(center= (self.x_centrada,300))
+
+            self.volumen = 0.1
 
 
             self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.x_centrada,200))
-            self.screen.blit(self.boton_subir, self.boton_subir_rect)
-            self.screen.blit(self.boton_bajar, self.boton_bajar_rect)
 
             self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
-            self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.x_centrada,200))
+            self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.posicion_centrada_abajo[0],200))
             self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
+
 
             self.PLAY_BACK = Button(image=None, pos=self.posicion_centrada_abajo, 
                                 text_input="BACK", font=self.get_font(75), base_color="White", hovering_color="Green")
@@ -105,13 +105,15 @@ class menu():
             self.PLAY_BACK.changeColor(self.posicion_del_mouse)
             self.PLAY_BACK.update(self.screen)
 
-            for event in pg.event.get():
+            lista_de_eventos = pg.event.get()
+            for event in lista_de_eventos:
                 if event.type == pg.QUIT:
                     pg.quit()
+                
                     
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
-                        self.main_menu(self)
+                        pausa = False
 
             pg.display.update() 
 

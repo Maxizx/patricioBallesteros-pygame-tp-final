@@ -163,3 +163,4 @@ class Player(pg.sprite.Sprite):
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
 
+

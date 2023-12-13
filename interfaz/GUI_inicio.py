@@ -1,11 +1,12 @@
+
+# if __name__ == "__main__":
 import pygame as pg
 from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
-from interfaz.botones import Button as Button
+from interfaz.settings.botones import Button as Button
 from game import GameManager
 from auxiliar.auxiliar import Auxiliar
 from interfaz.GUI_menus import menu
 
-# if __name__ == "__main__":
 class GUI():
     def __init__(self) -> None:
         pg.init()

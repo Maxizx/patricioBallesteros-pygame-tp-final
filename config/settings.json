@@ -27,9 +27,9 @@
                 "                         ",
                 "  XXXXX                  ",
                 "       XX                ",
-                "                         ",
-                "                         ",
-                "                 XXXXXXXX",
+                "            O             ",
+                "           O              ",
+                "          O       XXXXXXXX",
                 "                         ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
@@ -67,12 +67,12 @@
             },
             "0_escenario": [
                 "                         ",
-                "                         ",
+                "              O           ",
                 "  XXXXX      XXXXX       ",
-                "       XX                ",
+                "       XX    O            ",
                 "        XXXX             ",
                 "            XXXX         ",
-                "                 XXXXXXXX",
+                "            O     XXXXXXXX",
                 "                         ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
