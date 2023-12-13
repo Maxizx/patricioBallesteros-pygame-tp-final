@@ -3,6 +3,9 @@ from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from interfaz.settings.botones import Button as Button
 from auxiliar.auxiliar import Auxiliar
 import sys
+import pygame_widgets
+from pygame_widgets.slider import Slider
+
 
 
 # if __name__ == "__main__":
@@ -82,7 +85,7 @@ class menu():
 
     def pause(self):
         pausa = True
-
+        slider = Slider(self.screen,self.x_centrada/2,400,800,40,min=0,max=99,step=1)
         while pausa:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.fill("black")
@@ -110,10 +113,11 @@ class menu():
                 if event.type == pg.QUIT:
                     pg.quit()
                 
-                    
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
                         pausa = False
+
+            pygame_widgets.update(lista_de_eventos)
 
             pg.display.update() 
 
