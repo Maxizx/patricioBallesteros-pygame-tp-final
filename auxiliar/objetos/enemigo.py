@@ -28,7 +28,7 @@ class Enemy(pg.sprite.Sprite):
         self.grupo_enemigos = pg.sprite.Group()
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits =pg.time.get_ticks()
-        self.tiempo_spawn= 8000
+        self.tiempo_spawn= 6000
         self.relog_spawn = pg.time.get_ticks()
         self.ruido_spawn = Audio("generador_gallinas")
 

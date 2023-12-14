@@ -13,7 +13,7 @@ from auxiliar.objetos.player import Player
 
 
 class GameManager(pg.sprite.Sprite):
-    def __init__(self, nivel=0,escenario=0,score=0):
+    def __init__(self, nivel=0,escenario=0,score=0,lives = 5):
         pg.font.init()
         pg.init()
         pg.display.set_caption("Island Adventure")
@@ -33,7 +33,7 @@ class GameManager(pg.sprite.Sprite):
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
-        self.player_1 = Player(config_player,score)
+        self.player_1 = Player(config_player,score,lives)
         self.fruta = Frutas()
         self.enemigo = Enemy()
         self.menu_ = menu()
@@ -175,7 +175,7 @@ class GameManager(pg.sprite.Sprite):
         elif self.player_1.rect.right > self.screen_width:
             if self.escenario < 2:
                 self.escenario += 1
-                game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score)
+                game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score,lives=self.player_1.lives)
                 game.run()
 
                 

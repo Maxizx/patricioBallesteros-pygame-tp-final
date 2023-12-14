@@ -6,14 +6,14 @@ from auxiliar.musica import Audio
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, diccionario,score) -> None:
+    def __init__(self, diccionario,score,lives) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Idle (32x32).png", 11, 1)
         # self.jump_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, False, 2)
         # self.jump_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, True, 2)
         self.frame = 0
-        self.lives = 5
+        self.lives = lives
         self.score = score
         self.move_x = diccionario["x"]
         self.move_y = diccionario["y"]
