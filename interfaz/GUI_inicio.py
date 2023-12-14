@@ -82,15 +82,14 @@ class GUI():
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.blit(self.BG, (0, 0))
-            print(self.posicion_del_mouse)
             self.MENU_TEXT = self.get_font(100).render("MAIN MENU", True, "#b68f40")
             self.MENU_RECT = self.MENU_TEXT.get_rect(center = self.posicion_titulo)
 
             self.PLAY_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 250), 
                                 text_input="PLAY", font=self.get_font(75), base_color = self.color_boton, hovering_color = self.color_boton_al_apretar)
-            self.LEVEL_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 650), 
+            self.LEVEL_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 450), 
                                 text_input="NIVELES", font=self.get_font(75), base_color = self.color_boton, hovering_color = self.color_boton_al_apretar)
-            self.OPTIONS_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 400), 
+            self.OPTIONS_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 350), 
                                 text_input="OPTIONS", font=self.get_font(75), base_color = self.color_boton, hovering_color = self.color_boton_al_apretar)
             self.QUIT_BUTTON = Button(image="images/UI/PNG/blue_button04.png", pos=(self.x_centrada, 550), 
                                 text_input="QUIT", font=self.get_font(75), base_color = self.color_boton, hovering_color = self.color_boton_al_apretar)
