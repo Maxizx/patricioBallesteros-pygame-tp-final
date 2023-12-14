@@ -16,43 +16,38 @@
                 "gravity": 8,
                 "jump": 14
             },
-            "level_config":{
-                "level":0,
-                "cantidad_De_frutas": 10,
-                "Cantidad_enemigos":6
-            },
             
             "0_escenario": [
                 "                         ",
-                "                         ",
-                "  XXXXX                  ",
+                "          XXX               ",
+                "  XXXXX          XXXXXO        ",
                 "       XX                ",
-                "            O             ",
-                "       X   O              ",
-                "       X  O       XXXXXXXX",
-                "       X                  ",
+                "             OXXX            ",
+                "XXXX     XXX                  ",
+                "     XXX            XXXXXXXX",
+                "                  OOO      ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "1_escenario": [
                 "                         ",
                 "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                "        XXXX    O             ",
+                "XXXX    O         XXXX            ",
+                "      XXXXX   O               ",
+                "             XXXXXX   O        ",
+                "      XXX           XX  XXX      ",
+                "     O      O              ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "2_escenario": [
                 "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "                         ",
-                "        XXX     X        ",
-                "                X        ",
+                "                    XXXX     ",
+                "             XXXX            ",
+                "      XXXXX        XXX          ",
+                " XXX     O                   ",
+                "     XX O       XXX            ",
+                " XXX    O  XXX             ",
+                "      XXO                  ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ]
         },
@@ -60,42 +55,43 @@
             "jugador": {
                 "x": 200,
                 "y": 200,
-                "speed_walk": 4,
+                "speed_walk": 2,
                 "speed_run": 8,
                 "gravity": 8,
                 "jump": 14
             },
             "0_escenario": [
-                "                         ",
-                "              O           ",
+                "OOOOOOOOOOOOOOOOOOOOOOOOO  ",
+                "                            ",
                 "  XXXXX      XXXXX       ",
-                "       XX    O            ",
-                "        XXXX             ",
-                "            XXXX         ",
+                "      XXXO    O            ",
+                "       XXXXX             ",
+                "      O     XXXXX         ",
                 "            O     XXXXXXXX",
-                "                         ",
+                "   O              X      ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "1_escenario": [
-                "                         ",
-                "                         ",
-                "  XXXXX                  ",
-                "       XX                ",
-                "                         ",
-                "                         ",
-                "                 XXXXXXXX",
-                "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                "                XXX  OOO       ",
+                "                     OOO      ",
+                "XXXXXXX              OOO     ",
+                "       XX     XXX    OOO     ",
+                "  XXX                OOO      ",
+                "        XXX         XXXXXXXXXX",
+                "                       O  ",
+                "XXXX            ",
+                "XXXXXXXXX  XXXXXXXXXXXXXXXXXX"
+
             ],
             "2_escenario": [
                 "                         ",
                 "                         ",
                 "  XXXXX      XXXXX       ",
-                "       XX                ",
-                "        XXXX             ",
-                "            XXXX         ",
-                "                 XXXXXXXX",
-                "                         ",
+                "      XXX                ",
+                "       XXXXX             ",
+                "           XXXXX         ",
+                "OOOOOOOOOOO          XXXXXXXX",
+                "                   XXX     ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
             ]
@@ -124,25 +120,39 @@
             "1_escenario": [
                 "                         ",
                 "                         ",
-                "  XXXXX      XXXXX       ",
-                "       XX                ",
-                "        XXXX             ",
-                "            XXXX         ",
+                "                  ",
+                "                        ",
+                "                        ",
+                "                         ",
                 "                 XXXXXXXX",
                 "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                "XX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXX   XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXXX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXXXXX    ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+
+
 
             ],
             "2_escenario": [
-                "                         ",
-                "                         ",
-                "  XXXXX      XXXXX       ",
-                "       XX                ",
-                "        XXXX             ",
-                "            XXXX         ",
-                "                 XXXXXXXX",
-                "                         ",
-                "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                "    X                  OOXXXXXXX   ",
+                "    X                  OOXXXXXXX   ",
+                "    XX                  OOXXXXXXX",
+                "    X                  OOXXXXXXX  ",
+                "    X                  OOXXXXXXX  ",
+                "                      OOXXXXXXX   ",
+                "XXXXXXXXXXX           OOXXXXXXX    ",
+                "                      OOXXXXXXX   ",
+                "XX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XX    XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXX   XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXX  O O XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXXX O O  XXXXXXXXXXXXXXXXXXXXXXX",
+                "XXXXXXXXXXO    ",
+                "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
             ]
         }

@@ -3,6 +3,8 @@ import pygame as pg
 from auxiliar.constantes import *
 from auxiliar.auxiliar import Auxiliar
 import random as rd
+from auxiliar.musica import Audio
+
 
 
 class Enemy(pg.sprite.Sprite):
@@ -26,10 +28,9 @@ class Enemy(pg.sprite.Sprite):
         self.grupo_enemigos = pg.sprite.Group()
         self.cooldown_de_hit = 1000
         self.tiempo_entre_hits =pg.time.get_ticks()
-        self.tiempo_spawn= 5000
+        self.tiempo_spawn= 6000
         self.relog_spawn = pg.time.get_ticks()
-
-
+        self.ruido_spawn = Audio("generador_gallinas")
 
     def caminar_direccion(self, izquierda = True):
         if izquierda == True:
@@ -62,26 +63,6 @@ class Enemy(pg.sprite.Sprite):
         if self.rect.y < ALTO_VENTANA:
             self.rect.y += self.gravity
 
-
-    # def colision_con_enemigo(self,objeto):
-    #     if pg.sprite.spritecollide(objeto,self.grupo_enemigos,dokill=False):
-    #         # if self.rect.colliderect(objeto):
-    #             if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
-    #                 self.heroe.lives -=1
-    #                 self.tiempo_entre_hits = pg.time.get_ticks()
-
-    # def colision_con_objetos(self,objeto):
-
-    #     if self.rect.colliderect(objeto):
-    #         if self.rect[1] < objeto.top:
-    #             self.rect.bottom = objeto.top
-    #         elif self.rect[0] < objeto.left:
-    #             self.rect.right = objeto.left
-    #             self.caminar_direccion(True)
-    #         elif self.rect[0] <= objeto.right:
-    #             self.rect.left = objeto.right
-    #             self.caminar_direccion(False)
-
     def quitar_vida(self,daño):
         self.live -= daño
         return self.live
@@ -93,6 +74,7 @@ class Enemy(pg.sprite.Sprite):
                     enemigo = Enemy(coodenadas_x,coodenadas_y)
                     self.grupo_enemigos.add(enemigo)
                     print("Se creó un enemigo nueva")
+                    self.ruido_spawn.reproducir_audio()
             self.relog_spawn = pg.time.get_ticks()
     
 
@@ -101,7 +83,6 @@ class Enemy(pg.sprite.Sprite):
             self.animation = self.image_R
         elif self.mira_a_la_derecha == False:
             self.animation = self.image_L
-
         if self.frame < len(self.animation) - 1:
             self.frame += 1
         else:

@@ -13,25 +13,25 @@ from auxiliar.objetos.player import Player
 
 
 class GameManager(pg.sprite.Sprite):
-    def __init__(self, nivel=0,escenario=0,score=0):
+    def __init__(self, nivel=0,escenario=0,score=0,lives = 5):
         pg.font.init()
         pg.init()
-        pg.display.set_caption("Island Adventure")
         self.screen_width = ANCHO_VENTANA
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pg.time.Clock()
+        self.win = None
         self.frame_rate = 60
         self.valor_musica = 0
         self.debug = False
-        self.recompensa = Audio("apple",volumen=1)
+        self.ruido_recompensa = Audio("apple",volumen=1)
         self.musica_de_fondo = Audio("musica_de_fondo",repetir=-1)
         self.fuente = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",30)
         self.fuente_1 = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",29)   
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.imagen_fondo2 = Auxiliar.load_image_and_scale("images/locations/fondos/Blue.png",ANCHO_VENTANA,ALTO_VENTANA)
         self.vidas = Auxiliar.load_image_and_scale("images/corazo.png",50,50)
-        self.player_1 = Player(config_player,score)
+        self.player_1 = Player(config_player,score,lives)
         self.fruta = Frutas()
         self.enemigo = Enemy()
         self.menu_ = menu()
@@ -43,8 +43,10 @@ class GameManager(pg.sprite.Sprite):
         self.tiempo_inicio = pg.time.get_ticks() 
         self.relog = 0
         self.mapas = construir_mapas()
-        self.fruta.spawn_frutas(8)
+        self.fruta.spawn_frutas(5)
         self.cargar_mapa()
+        pg.display.set_caption("Island Adventure")
+
 
 
 
@@ -57,7 +59,7 @@ class GameManager(pg.sprite.Sprite):
         while True:
             self.clock.tick(self.frame_rate)
             self.relog = (pg.time.get_ticks() - self.tiempo_inicio) //1000 
-            # self.recompensa.reproducir_audio()
+
             self.cambio_de_escenario()
             
             for event in pg.event.get():
@@ -75,22 +77,12 @@ class GameManager(pg.sprite.Sprite):
                 if lista_teclas_presionadas[pg.K_o]:
                         self.debug = False
                 
-
-                if lista_teclas_presionadas[pg.K_UP]:
-                    self.musica_de_fondo.control_volumen(True)
-                    self.recompensa.control_volumen(True)
-                    print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
-                if lista_teclas_presionadas[pg.K_DOWN]:
-                    self.musica_de_fondo.control_volumen(False)
-                    self.recompensa.control_volumen(False)
-                    print(f"el volmen actual es de {self.musica_de_fondo.get_volumen_del_audio()}")
-                
                 self.player_1.selector_de_movimiento(lista_teclas_presionadas)
                 self.enemigo.caminar_direccion(True)
             
             self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(0,0)))
 
-            self.gameover()
+            self.pantalla_final()
 
             self.volumen_modificar()
 
@@ -105,7 +97,7 @@ class GameManager(pg.sprite.Sprite):
 
             self.enemigo.grupo_enemigos.update()
             self.player_1.update()
-            self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos)
+            self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos,self.player_1)
             self.mapas.grupo_bloques.draw(self.screen)
             self.mapas.grupo_bloques.update()
 
@@ -144,15 +136,15 @@ class GameManager(pg.sprite.Sprite):
 
             pg.display.flip()
 
-    def get_font(self,size): # Returns Press-Start-2P in the desired size
-        return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
-
-
-    def gameover(self):
+    def pantalla_final(self):
         if self.player_1.lives == 0:
-            self.menu_.game_over()
+            self.win = False
+        if self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
+            self.win = True
+
+        if self.win != None:
+            self.menu_.game_finished(self.win,self.player_1.score)
             
-            print("Game Over")
             
     def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
         for numero_de_nivel in range(len(lista_de_niveles)):
@@ -183,10 +175,9 @@ class GameManager(pg.sprite.Sprite):
         elif self.player_1.rect.right > self.screen_width:
             if self.escenario < 2:
                 self.escenario += 1
-                game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score)
+                game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score,lives=self.player_1.lives)
                 game.run()
-            if self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
-                self.menu_.win_game()
+
                 
 
 
@@ -202,24 +193,23 @@ class GameManager(pg.sprite.Sprite):
             bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
             if bloque_colisiona:
             # if self.rect.colliderect(objeto):
-                if objeto.rect[1] < bloque_colisiona.rect.top:
+                if objeto.rect.bottom > bloque_colisiona.rect.top and objeto.rect.top < bloque_colisiona.rect.top:
                     objeto.rect.bottom = bloque_colisiona.rect.top
 
-                elif objeto.rect[0] < bloque_colisiona.rect.left:
+                elif objeto.rect.right > bloque_colisiona.rect.left and bloque_colisiona.rect.top < objeto.rect.top:
+                    objeto.rect.bottom = bloque_colisiona.rect.top
                     objeto.rect.right = bloque_colisiona.rect.left
                     self.enemigo.caminar_direccion(True)
 
-                elif objeto.rect[0] <= bloque_colisiona.rect.right:
+                elif objeto.rect.left <bloque_colisiona.rect.right and objeto.rect.right > bloque_colisiona.rect.right:
                     objeto.rect.left = bloque_colisiona.rect.right
                     self.enemigo.caminar_direccion(False)
 
     def colision_con_fruta(self,objeto):
         if pg.sprite.spritecollide(objeto,group = self.fruta.grupo_frutas,dokill = True):
-            print("frutaaa")
             self.player_1.score += self.fruta.puntos
-            print(self.player_1.score)
-            print(self.recompensa.get_volumen_del_audio()) 
-            self.recompensa.reproducir_audio()
+            print(f"puntos : {self.player_1.score}")
+            self.ruido_recompensa.reproducir_audio()
 
     def colision_con_enemigo(self,objeto):
         if pg.sprite.spritecollide(objeto,self.enemigo.grupo_enemigos,dokill=False):
@@ -241,12 +231,12 @@ class GameManager(pg.sprite.Sprite):
             if player.rect.colliderect(objeto):
                 objeto = objeto.rect
                 if player.rect.bottom > objeto.top and player.rect.top < objeto.top:
-                    # print("choqué abajo")
+
                     player.rect.bottom = objeto.top
 
                 elif player.rect.top < objeto.bottom and player.rect.bottom > objeto.bottom:
                     player.rect.top = objeto.bottom
-                    # print("choqué arriba")
+
 
                 elif player.rect.right > objeto.left and player.rect.top < objeto.top:
                     player.rect.bottom = objeto.top
@@ -286,11 +276,20 @@ class GameManager(pg.sprite.Sprite):
     def dibujar_player(self):
             pg.draw.rect(self.screen,"Green",self.player_1.rect,2)
 
+
+
     def volumen_modificar(self):
-        print(self.valor_musica)
         volumen_extra = 0.4
+        volumen_menos = 0.3
+
         if self.valor_musica == 0:
             volumen_extra = 0
-        self.recompensa.set_volumen_audio(self.valor_musica + volumen_extra)
-        self.musica_de_fondo.set_volumen_audio(self.valor_musica)
+            volumen_menos = 0.3
+
+        self.ruido_recompensa.set_volumen_audio(self.valor_musica + volumen_extra)
+        self.musica_de_fondo.set_volumen_audio(self.valor_musica - volumen_menos)
+        self.player_1.ruido_disparo.set_volumen_audio(self.valor_musica + volumen_extra)
+        self.player_1.ruido_salto.set_volumen_audio(self.valor_musica - volumen_menos)
+        self.enemigo.ruido_spawn.set_volumen_audio(self.valor_musica)
+
 # 

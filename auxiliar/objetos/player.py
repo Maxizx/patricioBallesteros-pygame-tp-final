@@ -2,17 +2,18 @@ import pygame as pg
 from auxiliar.auxiliar import Auxiliar
 from auxiliar.constantes import *
 from auxiliar.objetos.balas import balas
+from auxiliar.musica import Audio
 
 
 class Player(pg.sprite.Sprite):
-    def __init__(self, diccionario,score) -> None:
+    def __init__(self, diccionario,score,lives) -> None:
         self.walk_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1)[:12]
         self.walk_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Run (32x32).png", 12, 1, True)[:12]
         self.stay = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/Idle (32x32).png", 11, 1)
         # self.jump_r = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, False, 2)
         # self.jump_l = Auxiliar.getSurfaceFromSpriteSheet("images/caracters/stink/jump.png", 33, 1, True, 2)
         self.frame = 0
-        self.lives = 5
+        self.lives = lives
         self.score = score
         self.move_x = diccionario["x"]
         self.move_y = diccionario["y"]
@@ -31,6 +32,10 @@ class Player(pg.sprite.Sprite):
         self.is_jump = False
         self.cooldown_disparo = 150         
         self.tiempo_entre_disparos = pg.time.get_ticks()
+        self.ruido_disparo = Audio("pop")
+        self.ruido_salto = Audio("jump")
+
+
 
 
     def selector_de_movimiento(self,movimientos):
@@ -57,6 +62,10 @@ class Player(pg.sprite.Sprite):
                 self.tiempo_entre_disparos = pg.time.get_ticks()
                 bala = balas("images/huevo.png",self.rect.x,self.rect.y,self.speed_run,self.lado)
                 self.grupo_de_balas.add(bala)
+                self.ruido_disparo.reproducir_audio()
+
+
+
 
         if action == "WALK_R":
             self.move_x = self.speed_walk
@@ -80,6 +89,7 @@ class Player(pg.sprite.Sprite):
             # self.frame = 0
             self.direccion = "up"
             self.is_jump = True
+            self.ruido_salto.reproducir_audio()
 
         elif action == "JUMP_L":
             self.move_y = -self.jump
@@ -88,6 +98,8 @@ class Player(pg.sprite.Sprite):
             # self.frame = 0
             self.direccion = "up"
             self.is_jump = True
+            self.ruido_salto.reproducir_audio()
+
 
         elif action == "STAY":
             self.animation = self.stay
@@ -123,9 +135,9 @@ class Player(pg.sprite.Sprite):
             self.rect.x -= self.rect.x
             self.lives -= 1
 
-    def draw(self, screen,grupo1 , grupo2):
+    def draw(self, screen,grupo1 , grupo2,player):
         for bala in self.grupo_de_balas:
-            bala.draw(screen,grupo1,grupo2)
+            bala.draw(screen,grupo1,grupo2,player)
 
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)

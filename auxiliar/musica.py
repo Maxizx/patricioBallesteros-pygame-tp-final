@@ -29,20 +29,3 @@ class Audio:
         self. mixer_audio.set_volume(valor)
 
 
-    def control_volumen(self, aumentar = True):
-        if self.mixer_audio.get_volume() < 0.1 and self.mixer_audio.get_volume() > 0.0:
-            if aumentar == True:
-                self.volumen_del_audio += 0.01
-            elif aumentar == False:
-                self.volumen_del_audio -= 0.01
-        elif self.mixer_audio.get_volume() == 0.0 and aumentar == True:
-            self.volumen_del_audio += 0.01
-        elif aumentar == False and self.mixer_audio.get_volume() == 0.1:
-            self.volumen_del_audio -= 0.01
-        else:
-            print("El audio está muy alto o está muteado")
-
-
-
-
-
