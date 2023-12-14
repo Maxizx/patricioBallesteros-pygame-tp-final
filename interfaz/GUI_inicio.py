@@ -156,19 +156,12 @@ class GUI():
 
                     if self.PLAY_BUTTON.checkForInput(self.posicion_del_mouse):
 
-                        # self.game = GameManager()
-                        # if self.game.loser == False:
-                        #     self.game.run()
-                        # elif self.game.loser == True:
-                        #     self.menus = menu
-                        #     self.menus.game_over()
-
                         self.game = GameManager()
                         self.game.run()
 
 
                     if self.OPTIONS_BUTTON.checkForInput(self.posicion_del_mouse):
-                        # options()
+
                         self.pause()
                     if self.QUIT_BUTTON.checkForInput(self.posicion_del_mouse):
                         pg.quit()

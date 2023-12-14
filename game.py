@@ -21,6 +21,7 @@ class GameManager(pg.sprite.Sprite):
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pg.time.Clock()
+        self.win = False
         self.frame_rate = 60
         self.valor_musica = 0
         self.debug = False
@@ -74,7 +75,6 @@ class GameManager(pg.sprite.Sprite):
                         self.debug = True
                 if lista_teclas_presionadas[pg.K_o]:
                         self.debug = False
-                
 
                 if lista_teclas_presionadas[pg.K_UP]:
                     self.musica_de_fondo.control_volumen(True)
@@ -150,9 +150,12 @@ class GameManager(pg.sprite.Sprite):
 
     def gameover(self):
         if self.player_1.lives == 0:
-            self.menu_.game_over()
+            self.win = False
+        elif self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
+            self.win = True
+
+        self.menu_.win_game(self.win)
             
-            print("Game Over")
             
     def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
         for numero_de_nivel in range(len(lista_de_niveles)):
@@ -185,8 +188,7 @@ class GameManager(pg.sprite.Sprite):
                 self.escenario += 1
                 game = GameManager(self.nivel,escenario=self.escenario, score=self.player_1.score)
                 game.run()
-            if self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
-                self.menu_.win_game()
+
                 
 
 

@@ -28,9 +28,9 @@
                 "  XXXXX                  ",
                 "       XX                ",
                 "            O             ",
-                "       X   O              ",
-                "       X  O       XXXXXXXX",
-                "       X                  ",
+                "          O              ",
+                "          O       XXXXXXXX",
+                "                          ",
                 "XXXXXXXXXXXXXXXXXXXXXXXXXXXX"
             ],
             "1_escenario": [

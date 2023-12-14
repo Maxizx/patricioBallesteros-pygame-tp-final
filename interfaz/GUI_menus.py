@@ -1,11 +1,12 @@
+import sys
 import pygame as pg
 import pygame_widgets
-import sys
+from pygame_widgets.slider import Slider
+from pygame_widgets.textbox import TextBox
 from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from interfaz.settings.botones import Button as Button
 from auxiliar.auxiliar import Auxiliar
-from pygame_widgets.slider import Slider
-from pygame_widgets.textbox import TextBox
+from base_de_datos.bd_ranking import base_de_datos
 
 
 # if __name__ == "__main__":
@@ -28,11 +29,12 @@ class menu():
         self.color_boton_al_apretar = "White"
         self.color_letras = "Black"
         self.volumen_actual = 0.2
+        self.bd = base_de_datos
 
 
 
 
-    def get_font(self,size): # Returns Press-Start-2P in the desired size
+    def get_font(self,size): 
         return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
         
     def game_over(self):
@@ -41,7 +43,7 @@ class menu():
             self.posicion_del_mouse = pg.mouse.get_pos()
 
             self.screen.fill("black")
-            self.PLAY_TEXT = self.get_font(70).render("Gave Over", True, (255,45,0))
+            self.PLAY_TEXT = self.get_font(70).render("Game Over", True, (255,45,0))
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= self.posicion_centrada)
             self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
 
@@ -58,6 +60,7 @@ class menu():
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
                         over = False
+                        self.bd.ranking(self)
 
 
                         print("hola mundo en la nueva rama")
