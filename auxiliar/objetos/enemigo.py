@@ -32,8 +32,6 @@ class Enemy(pg.sprite.Sprite):
         self.relog_spawn = pg.time.get_ticks()
         self.ruido_spawn = Audio("generador_gallinas")
 
-
-
     def caminar_direccion(self, izquierda = True):
         if izquierda == True:
             self.move_x = -self.speed_walk

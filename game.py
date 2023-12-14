@@ -45,7 +45,7 @@ class GameManager(pg.sprite.Sprite):
         self.tiempo_inicio = pg.time.get_ticks() 
         self.relog = 0
         self.mapas = construir_mapas()
-        self.fruta.spawn_frutas(8)
+        self.fruta.spawn_frutas(5)
         self.cargar_mapa()
 
 
