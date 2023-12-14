@@ -14,25 +14,32 @@ class base_de_datos:
         self.rescalado = (800,400)
         self.panel_menu_niveles = Auxiliar.load_image_and_scale("images/UI/PNG/blue_panel.png",medida_del_ancho = self.rescalado[0],medida_de_lo_alto=self.rescalado[1])
         self.color_boton_al_apretar = "Green"
+        self.color_letras="Black"
+
 
     def crear_tabla(self):
         with sqlite3.connect(self.nombre_del_archivo) as conexion:
-            conexion.execute("create table ranking (player TEXT,score INTEGER);")
+                conexion.execute("create table if not exists ranking (player TEXT,score INTEGER);")
 
     def agregar_datos(self,player,score):
         with sqlite3.connect(self.nombre_del_archivo) as conexion:
             conexion.execute("insert into ranking(player,score) values (?,?)", (player,score))
             conexion.commit()#
 
-    # def recibir_datos(self):
-    #     with sqlite3.connect(self.nombre_del_archivo) as conexion:
-    #         cursor = conexion.execute("SELECT player, score FROM ranking ORDER BY score DESC LIMIT 5;")
-    #         diccionario = {}
-    #         for fila in cursor:
-    #             diccionario
+    def recibir_datos(self):
+        with sqlite3.connect(self.nombre_del_archivo) as conexion:
+            cursor = conexion.execute("SELECT player, score FROM ranking ORDER BY score DESC LIMIT 5;")
+            lista = []
+            for fila in cursor:
+                lista.append(fila)
+            return lista
 
-
-    def ranking(self):
+    def get_font(self,size): # Returns Press-Start-2P in the desired size
+            return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
+        
+    def ranking(self, player,score):
+        self.crear_tabla()
+        self.agregar_datos(player,score)
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.fill("black")
@@ -41,6 +48,9 @@ class base_de_datos:
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= self.posicion_titulo)
             self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
             self.screen.blit(self.panel_menu_niveles,(250, 160))
+
+            datos = self.recibir_datos()
+            print(datos)
 
             self.PLAY_BACK = Button(image="images/UI/PNG/grey_button02.png", pos=(640,630), text_input="BACK", font=self.get_font(75), base_color=self.color_letras, hovering_color="Green")
             self.level_one = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,250), text_input=" LEVEL 1 ", font=self.get_font(75), base_color = self.color_letras, hovering_color="Green")

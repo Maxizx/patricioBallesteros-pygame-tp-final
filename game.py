@@ -21,7 +21,7 @@ class GameManager(pg.sprite.Sprite):
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
         self.clock = pg.time.Clock()
-        self.win = False
+        self.win = None
         self.frame_rate = 60
         self.valor_musica = 0
         self.debug = False
@@ -90,7 +90,7 @@ class GameManager(pg.sprite.Sprite):
             
             self.screen.blit(self.imagen_fondo2, self.imagen_fondo2.get_rect(topleft=(0,0)))
 
-            self.gameover()
+            self.pantalla_final()
 
             self.volumen_modificar()
 
@@ -144,17 +144,14 @@ class GameManager(pg.sprite.Sprite):
 
             pg.display.flip()
 
-    def get_font(self,size): # Returns Press-Start-2P in the desired size
-        return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
-
-
-    def gameover(self):
+    def pantalla_final(self):
         if self.player_1.lives == 0:
             self.win = False
-        elif self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
+        if self.nivel == 2 and self.escenario == 2 and self.player_1.score >= 1000:
             self.win = True
 
-        self.menu_.win_game(self.win)
+        if self.win != None:
+            self.menu_.game_finished(self.win,self.player_1.score)
             
             
     def eleccion_nivel(self, lista_de_niveles,nivel_elegido,escenario_elegido) -> str:
