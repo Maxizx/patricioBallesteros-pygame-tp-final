@@ -2,6 +2,7 @@ import pygame as pg
 from auxiliar.auxiliar import Auxiliar
 from auxiliar.constantes import *
 from auxiliar.objetos.balas import balas
+from auxiliar.musica import Audio
 
 
 class Player(pg.sprite.Sprite):
@@ -31,6 +32,10 @@ class Player(pg.sprite.Sprite):
         self.is_jump = False
         self.cooldown_disparo = 150         
         self.tiempo_entre_disparos = pg.time.get_ticks()
+        self.ruido_disparo = Audio("pop")
+        self.ruido_salto = Audio("jump")
+
+
 
 
     def selector_de_movimiento(self,movimientos):
@@ -57,6 +62,10 @@ class Player(pg.sprite.Sprite):
                 self.tiempo_entre_disparos = pg.time.get_ticks()
                 bala = balas("images/huevo.png",self.rect.x,self.rect.y,self.speed_run,self.lado)
                 self.grupo_de_balas.add(bala)
+                self.ruido_disparo.reproducir_audio()
+
+
+
 
         if action == "WALK_R":
             self.move_x = self.speed_walk
@@ -80,6 +89,7 @@ class Player(pg.sprite.Sprite):
             # self.frame = 0
             self.direccion = "up"
             self.is_jump = True
+            self.ruido_salto.reproducir_audio()
 
         elif action == "JUMP_L":
             self.move_y = -self.jump
@@ -88,6 +98,8 @@ class Player(pg.sprite.Sprite):
             # self.frame = 0
             self.direccion = "up"
             self.is_jump = True
+            self.ruido_salto.reproducir_audio()
+
 
         elif action == "STAY":
             self.animation = self.stay

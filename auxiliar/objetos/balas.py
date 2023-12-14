@@ -1,6 +1,7 @@
 import pygame as pg
 from auxiliar.auxiliar import Auxiliar
 from auxiliar.constantes import *
+from auxiliar.musica import Audio
 
 
 class balas(pg.sprite.Sprite):
@@ -16,6 +17,7 @@ class balas(pg.sprite.Sprite):
         self.rect.bottom = y + 10
         self.update_time = pg.time.get_ticks()
         self.frames = 85
+        self.ruido_kill = Audio("kill_chicken")
 
 
         if self.lado == False:
@@ -45,6 +47,7 @@ class balas(pg.sprite.Sprite):
                 if vida_enemigo <= 0:
                     enemigo.kill()
                     player.score += 10
+                    self.ruido_kill.reproducir_audio()
 
                 self.kill()
                 
