@@ -3,7 +3,7 @@ import pygame as pg
 from interfaz.settings.botones import Button 
 from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from auxiliar.auxiliar import Auxiliar
-
+from interfaz.GUI_inicio import GUI
 
 
 class base_de_datos:
@@ -75,7 +75,7 @@ class base_de_datos:
                     
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
-                        pass
+                        GUI.main_menu(self)
     
 
 
