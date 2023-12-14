@@ -93,11 +93,6 @@ class menu():
 
             self.volumen_actual = valor
 
-
-
-            
-
-
             self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.x_centrada,200))
 
