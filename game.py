@@ -105,7 +105,7 @@ class GameManager(pg.sprite.Sprite):
 
             self.enemigo.grupo_enemigos.update()
             self.player_1.update()
-            self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos)
+            self.player_1.draw(self.screen,self.mapas.grupo_bloques,self.enemigo.grupo_enemigos,self.player_1)
             self.mapas.grupo_bloques.draw(self.screen)
             self.mapas.grupo_bloques.update()
 
