@@ -73,6 +73,8 @@ class GUI():
 
             pg.display.update()
         
+
+        
     def play(self):
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()

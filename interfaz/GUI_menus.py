@@ -1,11 +1,11 @@
 import pygame as pg
+import pygame_widgets
+import sys
 from auxiliar.constantes import (ANCHO_VENTANA,ALTO_VENTANA)
 from interfaz.settings.botones import Button as Button
 from auxiliar.auxiliar import Auxiliar
-import sys
-import pygame_widgets
 from pygame_widgets.slider import Slider
-
+from pygame_widgets.textbox import TextBox
 
 
 # if __name__ == "__main__":
@@ -27,12 +27,17 @@ class menu():
         self.color_boton = "Black"
         self.color_boton_al_apretar = "White"
         self.color_letras = "Black"
+        self.volumen_actual = 0.2
+
+
+
 
     def get_font(self,size): # Returns Press-Start-2P in the desired size
         return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
         
     def game_over(self):
-        while True:
+        over = True
+        while over:
             self.posicion_del_mouse = pg.mouse.get_pos()
 
             self.screen.fill("black")
@@ -52,6 +57,7 @@ class menu():
                     
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
+                        # over = False
                         pg.quit()
                         sys.exit()
 
@@ -85,13 +91,23 @@ class menu():
 
     def pause(self):
         pausa = True
-        slider = Slider(self.screen,self.x_centrada/2,400,800,40,min=0,max=99,step=1)
+        slider = Slider(self.screen,400,350,500,20,min=0,max=99,step=1)
+        slider.setValue(int(self.volumen_actual * 100))
+        output = TextBox(self.screen, 940, 340, 35, 35, fontSize=20)
+        
         while pausa:
             self.posicion_del_mouse = pg.mouse.get_pos()
-            self.screen.fill("black")
+            # self.screen.fill("black")
+            self.screen.blit(self.BG, (0,0))
+
+            output.setText(slider.getValue())
+            valor = slider.getValue() / 100
+
+            self.volumen_actual = valor
 
 
-            self.volumen = 0.1
+
+            
 
 
             self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
@@ -116,6 +132,7 @@ class menu():
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
                         pausa = False
+                        return self.volumen_actual
 
             pygame_widgets.update(lista_de_eventos)
 

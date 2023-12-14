@@ -123,39 +123,6 @@ class Player(pg.sprite.Sprite):
             self.rect.x -= self.rect.x
             self.lives -= 1
 
-    # def colision_con_enemigo(self,objeto):
-    #     if pg.sprite.spritecollide(objeto,self.grupo_enemigos):
-    #         if self.rect.colliderect(objeto):
-    #             if objeto.rect.bottom < self.rect.top:
-    #                 print("pisó al enemigo")
-    #             else:
-    #                 if (pg.time.get_ticks() - self.tiempo_entre_hits) > self.cooldown_de_hit:
-    #                     self.lives -=1
-    #                     self.tiempo_entre_hits = pg.time.get_ticks()
-
-
-    def movimiento_horizontal_de_la_camara(self, valor):
-        camara_x = -self.rect[0] % ANCHO_VENTANA
-        camara_x -=  valor
-        return camara_x
-
-    # def colision_con_objetos(self,objeto):
-    #     if pg.sprite.spritecollide(self.rect,):
-    #     # if self.rect.colliderect(objeto):
-    #         if self.rect[1] < objeto.top:
-    #             # print("choqué abajo")
-    #             self.rect.bottom = objeto.top
-
-    #         elif self.rect[1] < objeto.bottom and self.rect.bottom > objeto.bottom:
-    #             self.rect.top = objeto.bottom
-    #             print("choqué arriba")
-    #         elif self.rect[0] < objeto.left:
-    #             self.rect.right = objeto.left
-    #             # print("choqué a la derecha")
-    #         elif self.rect[0] <= objeto.right:
-    #             self.rect.left = objeto.right
-    #             # print("choqué a la izquiera")
-
     def draw(self, screen,grupo1 , grupo2):
         for bala in self.grupo_de_balas:
             bala.draw(screen,grupo1,grupo2)

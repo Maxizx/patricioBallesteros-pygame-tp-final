@@ -6,7 +6,7 @@ path_musica = configuraciones.get("FOLDER_MUSIC")
 volumen_default = configuraciones.get("VOLUMEN_DEFAULT")
 
 
-class audio:
+class Audio:
     def __init__(self,nombre, volumen = volumen_default, repetir = 0, ubi = path_musica) -> None:
         self.nombre_de_la_cancion = nombre
         self.volumen_del_audio = volumen
@@ -22,6 +22,12 @@ class audio:
     
     def get_volumen_del_audio(self):
         return self.mixer_audio.get_volume() 
+    
+    def set_volumen_audio(self,valor):
+        if valor > 1:
+            valor = 1
+        self. mixer_audio.set_volume(valor)
+
 
     def control_volumen(self, aumentar = True):
         if self.mixer_audio.get_volume() < 0.1 and self.mixer_audio.get_volume() > 0.0:
