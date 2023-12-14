@@ -79,13 +79,13 @@ class menu():
 
     def pause(self):
         pausa = True
+        self.volumen_actual = 0.2
         slider = Slider(self.screen,400,350,500,20,min=0,max=99,step=1)
         slider.setValue(int(self.volumen_actual * 100))
         output = TextBox(self.screen, 940, 340, 35, 35, fontSize=20)
         
         while pausa:
             self.posicion_del_mouse = pg.mouse.get_pos()
-            # self.screen.fill("black")
             self.screen.blit(self.BG, (0,0))
 
             output.setText(slider.getValue())
@@ -93,10 +93,8 @@ class menu():
 
             self.volumen_actual = valor
 
-            self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
-            self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.x_centrada,200))
 
-            self.PLAY_TEXT = self.get_font(45).render("Pause", True, "White")
+            self.PLAY_TEXT = self.get_font(45).render("Settings", True, "White")
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.posicion_centrada_abajo[0],200))
             self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
 

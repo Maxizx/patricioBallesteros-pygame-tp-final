@@ -193,14 +193,15 @@ class GameManager(pg.sprite.Sprite):
             bloque_colisiona =  pg.sprite.spritecollideany(objeto,self.mapas.grupo_bloques)
             if bloque_colisiona:
             # if self.rect.colliderect(objeto):
-                if objeto.rect[1] < bloque_colisiona.rect.top:
+                if objeto.rect.bottom > bloque_colisiona.rect.top and objeto.rect.top < bloque_colisiona.rect.top:
                     objeto.rect.bottom = bloque_colisiona.rect.top
 
-                elif objeto.rect[0] < bloque_colisiona.rect.left:
+                elif objeto.rect.right > bloque_colisiona.rect.left and bloque_colisiona.rect.top < objeto.rect.top:
+                    objeto.rect.bottom = bloque_colisiona.rect.top
                     objeto.rect.right = bloque_colisiona.rect.left
                     self.enemigo.caminar_direccion(True)
 
-                elif objeto.rect[0] <= bloque_colisiona.rect.right:
+                elif objeto.rect.left <bloque_colisiona.rect.right and objeto.rect.right > bloque_colisiona.rect.right:
                     objeto.rect.left = bloque_colisiona.rect.right
                     self.enemigo.caminar_direccion(False)
 

@@ -155,14 +155,13 @@ class GUI():
                         self.niveles()
 
                     if self.PLAY_BUTTON.checkForInput(self.posicion_del_mouse):
-
                         self.game = GameManager()
                         self.game.run()
 
 
                     if self.OPTIONS_BUTTON.checkForInput(self.posicion_del_mouse):
 
-                        self.pause()
+                        menu.pause(self)
                     if self.QUIT_BUTTON.checkForInput(self.posicion_del_mouse):
                         pg.quit()
 
