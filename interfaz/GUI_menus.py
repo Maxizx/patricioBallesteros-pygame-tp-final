@@ -9,7 +9,7 @@ from auxiliar.auxiliar import Auxiliar
 from base_de_datos.bd_ranking import base_de_datos
 
 
-# if __name__ == "__main__":
+
 class menu():
     def __init__(self) -> None:
         pg.init()
@@ -40,13 +40,15 @@ class menu():
 
     def get_font(self,size): 
         return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
-        
+
+
     def game_finished(self,win,score):
         self.textbox = TextBox(self.screen, 400, 250, 400, 80, fontSize=50,colour="White",
                 borderColour=(255, 255, 255), textColour=(0, 0, 0),
                 onSubmit=self.output, radius=10, borderThickness=5)
         puntaje = score
-        while True:
+        salir = False
+        while not salir:
             self.posicion_del_mouse = pg.mouse.get_pos()
 
             self.screen.fill("black")
@@ -59,10 +61,15 @@ class menu():
             self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= (self.posicion_centrada[0],self.posicion_centrada[1]-200))
             self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
 
-            self.PLAY_BACK = Button(image=None, pos= (self.posicion_centrada_abajo[0],self.posicion_centrada_abajo[1] + 100), 
+
+            self.boton_menu = Button(image=None, pos= (self.posicion_centrada_abajo[0],self.posicion_centrada_abajo[1] + 150), 
+                                text_input="Quit", font=self.get_font(75), base_color="White", hovering_color="Green")
+            self.PLAY_BACK = Button(image=None, pos= (self.posicion_centrada_abajo[0],self.posicion_centrada_abajo[1] + 75), 
                                 text_input="Rank", font=self.get_font(75), base_color="White", hovering_color="Green")
 
+            self.boton_menu.changeColor(self.posicion_del_mouse)
             self.PLAY_BACK.changeColor(self.posicion_del_mouse)
+            self.boton_menu.update(self.screen)
             self.PLAY_BACK.update(self.screen)
             events = pg.event.get()
             for event in events:
@@ -74,10 +81,18 @@ class menu():
                         nombre = self.output()
                         self.bd.ranking(nombre,puntaje)
 
+                    if self.boton_menu.checkForInput(self.posicion_del_mouse):
+                        pg.quit()
+                        sys.exit()
+
             pygame_widgets.update(events)
             pg.display.update()
 
+
+
+
     def pause(self):
+        pg.display.set_caption("configuraciones")
         pausa = True
         self.volumen_actual = 0.2
         slider = Slider(self.screen,400,350,500,20,min=0,max=99,step=1)
@@ -118,29 +133,4 @@ class menu():
             pygame_widgets.update(lista_de_eventos)
 
             pg.display.update() 
-
-    def options(self):
-        while True:
-            self.posicion_del_mouse = pg.mouse.get_pos()
-            self.screen.fill("white")
-
-            self.OPTIONS_TEXT = self.get_font(45).render("This is the OPTIONS self.screen.", True, "Black")
-            self.OPTIONS_RECT = self.OPTIONS_TEXT.get_rect(center= self.posicion_centrada)
-            self.screen.blit(self.OPTIONS_TEXT, self.OPTIONS_RECT)
-
-            self.OPTIONS_BACK = Button(image=None, pos=self.posicion_centrada_abajo, 
-                                text_input="BACK", font=self.get_font(75), base_color="Black", hovering_color="Green")
-
-            self.OPTIONS_BACK.changeColor(self.posicion_del_mouse)
-            self.OPTIONS_BACK.update(self.screen)
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    if self.OPTIONS_BACK.checkForInput(self.posicion_del_mouse):
-                        self.main_menu()
-
-            pg.display.update()
 

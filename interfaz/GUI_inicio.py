@@ -31,6 +31,8 @@ class GUI():
         return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
         
     def niveles(self):
+        pg.display.set_caption("Selector de niveles")
+
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.fill("black")
@@ -74,57 +76,9 @@ class GUI():
             pg.display.update()
         
 
-        
-    def play(self):
-        while True:
-            self.posicion_del_mouse = pg.mouse.get_pos()
-            self.screen.fill("black")
-
-            self.PLAY_TEXT = self.get_font(45).render("This is the PLAY self.screen.", True, "White")
-            self.PLAY_RECT = self.PLAY_TEXT.get_rect(center= self.posicion_centrada)
-            self.screen.blit(self.PLAY_TEXT, self.PLAY_RECT)
-
-            self.PLAY_BACK = Button(image=None, pos=self.posicion_centrada_abajo, text_input="BACK", font=self.get_font(75), base_color="White", hovering_color="Green")
-
-            self.PLAY_BACK.changeColor(self.posicion_del_mouse)
-            self.PLAY_BACK.update(self.screen)
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-                    
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
-                        pass
-
-            pg.display.update()
-        
-    def options(self):
-        while True:
-            self.posicion_del_mouse = pg.mouse.get_pos()
-            self.screen.fill("white")
-
-            self.OPTIONS_TEXT = self.get_font(45).render("This is the OPTIONS self.screen.", True, "Black")
-            self.OPTIONS_RECT = self.OPTIONS_TEXT.get_rect(center= self.posicion_centrada)
-            self.screen.blit(self.OPTIONS_TEXT, self.OPTIONS_RECT)
-
-            self.OPTIONS_BACK = Button(image=None, pos=self.posicion_centrada_abajo, 
-                                text_input="BACK", font=self.get_font(75), base_color="Black", hovering_color="Green")
-
-            self.OPTIONS_BACK.changeColor(self.posicion_del_mouse)
-            self.OPTIONS_BACK.update(self.screen)
-
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    pg.quit()
-
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    if self.OPTIONS_BACK.checkForInput(self.posicion_del_mouse):
-                        self.main_menu()
-
-            pg.display.update()
-
     def main_menu(self):
+        pg.display.set_caption("menu principal")
+
         while True:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.blit(self.BG, (0, 0))
@@ -158,10 +112,9 @@ class GUI():
                         self.game = GameManager()
                         self.game.run()
 
-
                     if self.OPTIONS_BUTTON.checkForInput(self.posicion_del_mouse):
-
                         menu.pause(self)
+
                     if self.QUIT_BUTTON.checkForInput(self.posicion_del_mouse):
                         pg.quit()
 

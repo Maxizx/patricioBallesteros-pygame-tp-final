@@ -16,7 +16,6 @@ class GameManager(pg.sprite.Sprite):
     def __init__(self, nivel=0,escenario=0,score=0,lives = 5):
         pg.font.init()
         pg.init()
-        pg.display.set_caption("Island Adventure")
         self.screen_width = ANCHO_VENTANA
         self.screen_height = ALTO_VENTANA
         self.screen = pg.display.set_mode((self.screen_width, self.screen_height))
@@ -27,7 +26,6 @@ class GameManager(pg.sprite.Sprite):
         self.debug = False
         self.ruido_recompensa = Audio("apple",volumen=1)
         self.musica_de_fondo = Audio("musica_de_fondo",repetir=-1)
-        self.ruido_disparo = Audio("pop")
         self.fuente = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",30)
         self.fuente_1 = pg.font.SysFont("images/UI/Font/kenvector_future_thin.ttf",29)   
         self.imagen_fondo = Auxiliar.load_image_and_scale("images/locations/fondos/Purple.png",ANCHO_VENTANA,ALTO_VENTANA)
@@ -47,6 +45,8 @@ class GameManager(pg.sprite.Sprite):
         self.mapas = construir_mapas()
         self.fruta.spawn_frutas(5)
         self.cargar_mapa()
+        pg.display.set_caption("Island Adventure")
+
 
 
 
@@ -276,6 +276,8 @@ class GameManager(pg.sprite.Sprite):
     def dibujar_player(self):
             pg.draw.rect(self.screen,"Green",self.player_1.rect,2)
 
+
+
     def volumen_modificar(self):
         volumen_extra = 0.4
         volumen_menos = 0.3
@@ -286,4 +288,8 @@ class GameManager(pg.sprite.Sprite):
 
         self.ruido_recompensa.set_volumen_audio(self.valor_musica + volumen_extra)
         self.musica_de_fondo.set_volumen_audio(self.valor_musica - volumen_menos)
+        self.player_1.ruido_disparo.set_volumen_audio(self.valor_musica + volumen_extra)
+        self.player_1.ruido_salto.set_volumen_audio(self.valor_musica - volumen_menos)
+        self.enemigo.ruido_spawn.set_volumen_audio(self.valor_musica)
+
 # 

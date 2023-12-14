@@ -37,11 +37,13 @@ class base_de_datos:
             return pg.font.Font("images/UI/Font/kenvector_future_thin.ttf", size)
         
     def ranking(self, player,score):
+        pg.display.set_caption("Ranking")
+
 
         self.crear_tabla()
         self.agregar_datos(player,score)
-
-        while True:
+        rank = True
+        while rank:
             self.posicion_del_mouse = pg.mouse.get_pos()
             self.screen.fill("black")
 
@@ -74,7 +76,7 @@ class base_de_datos:
                     
                 if event.type == pg.MOUSEBUTTONDOWN:
                     if self.PLAY_BACK.checkForInput(self.posicion_del_mouse):
-                        pass
+                        rank = False
     
 
 
