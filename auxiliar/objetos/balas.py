@@ -24,12 +24,12 @@ class balas(pg.sprite.Sprite):
             self.speed = speed
 
         
-    def update(self, lista_de_obstaculos, lista_de_enemigos):
+    def update(self, lista_de_obstaculos, lista_de_enemigos,player):
 
         self.rect.centerx += self.speed
 
         self.colision_con_bloques(lista_de_obstaculos)
-        self.colision_con_enemigo(lista_de_enemigos)
+        self.colision_con_enemigo(lista_de_enemigos,player)
         self.colision_bordes()
 
 
@@ -37,13 +37,15 @@ class balas(pg.sprite.Sprite):
             if self.rect.centerx > ANCHO_VENTANA or self.rect.centerx < 0:
                 self.kill()
 
-    def colision_con_enemigo(self, lista_de_enemigos):
+    def colision_con_enemigo(self, lista_de_enemigos,player):
         for enemigo in lista_de_enemigos:
             if enemigo.rect.colliderect(self.rect):
                 vida_enemigo = enemigo.quitar_vida(self.daño)
                 print(vida_enemigo)
                 if vida_enemigo <= 0:
                     enemigo.kill()
+                    player.score += 10
+
                 self.kill()
                 
     
@@ -61,8 +63,8 @@ class balas(pg.sprite.Sprite):
                 self.index_current_frame = 0
             self.update_time = pg.time.get_ticks()
         
-    def draw(self, screen,lista_de_obstaculos, lista_de_enemigos):
-        self.update(lista_de_obstaculos, lista_de_enemigos)
+    def draw(self, screen,lista_de_obstaculos, lista_de_enemigos,player):
+        self.update(lista_de_obstaculos, lista_de_enemigos,player)
         self.do_animation()
         screen.blit(self.current_frame, (self.rect.centerx,self.rect.centery))
 

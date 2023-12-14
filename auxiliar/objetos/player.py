@@ -123,9 +123,9 @@ class Player(pg.sprite.Sprite):
             self.rect.x -= self.rect.x
             self.lives -= 1
 
-    def draw(self, screen,grupo1 , grupo2):
+    def draw(self, screen,grupo1 , grupo2,player):
         for bala in self.grupo_de_balas:
-            bala.draw(screen,grupo1,grupo2)
+            bala.draw(screen,grupo1,grupo2,player)
 
         self.image = self.animation[self.frame]
         screen.blit(self.image, self.rect)
