@@ -50,12 +50,11 @@ class base_de_datos:
             self.screen.blit(self.panel_menu_niveles,(250, 160))
 
             datos = self.recibir_datos()
-            print(datos)
 
-            self.PLAY_BACK = Button(image="images/UI/PNG/grey_button02.png", pos=(640,630), text_input="BACK", font=self.get_font(75), base_color=self.color_letras, hovering_color="Green")
-            self.level_one = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,250), text_input=" LEVEL 1 ", font=self.get_font(75), base_color = self.color_letras, hovering_color="Green")
-            self.level_two = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,350), text_input=" LEVEL 2 ", font=self.get_font(75), base_color = self.color_letras, hovering_color="Green")
-            self.level_three = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,450), text_input=" LEVEL 3 ", font=self.get_font(75), base_color =  self.color_letras, hovering_color="Green")
+            self.PLAY_BACK = Button(image="images/UI/PNG/grey_button02.png", pos=(640,630), text_input="BACK", font=self.get_font(40), base_color=self.color_letras, hovering_color="Green")
+            self.level_one = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,250), text_input=f" {datos[0][0]} score: {datos[0][1]} ", font=self.get_font(40), base_color = self.color_letras, hovering_color="Green")
+            self.level_two = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,350), text_input=f" {datos[1][0]} score: {datos[1][1]} ", font=self.get_font(40), base_color = self.color_letras, hovering_color="Green")
+            self.level_three = Button(image="images/UI/PNG/grey_button02.png", pos=(ANCHO_VENTANA/2,450), text_input=f" {datos[2][0]} score: {datos[2][1]} ", font=self.get_font(40), base_color =  self.color_letras, hovering_color="Green")
 
             self.PLAY_BACK.changeColor(self.posicion_del_mouse)
             self.level_one.changeColor(self.posicion_del_mouse)
